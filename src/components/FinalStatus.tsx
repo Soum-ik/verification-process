@@ -5,8 +5,11 @@ import passAction from '../../public/pass.svg'
 import failAction from '../../public/fail.svg'
 
 
+ 
+
 import H1 from './shared/H1';
-import { Key } from 'react';
+import { ReactNode } from 'react';
+// import { Key } from 'react';
 const FinalStatus = () => {
     const status = false
     const statusData = [
@@ -71,11 +74,11 @@ const StatusCard = ({ title, details, status }: any) => {
                 <h3 className="font-Inter text-headingColor    font-bold text-[14px]  leading-normal">{title}</h3>
                 {details && (
                     <div className="mt-1 text-sm text-gray-500">
-                        {details.map((detail: { [s: string]: unknown; } | ArrayLike<unknown>, index: Key | null | undefined) => (
+                        {details.map((detail: any, index: any) => (
                             <div key={index} className="flex">
                                 {Object.entries(detail).map(([key, value]) => (
                                     <div key={key} className=''>
-                                        <span className=' text-[10px] text-[#999999] font-medium'>{key}: </span><span className='text-[10px] text-headingColor  font-semibold'>{value}</span>
+                                        <span className=' text-[10px] text-[#999999] font-medium'>{key}: </span><span className='text-[10px] text-headingColor  font-semibold'>{value as ReactNode}</span>
                                     </div>
                                 ))}
                             </div>

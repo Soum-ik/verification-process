@@ -8,6 +8,7 @@ import Qa from "../components/Qa";
 import FinalStatus from "../components/FinalStatus";
 import OpenCamera from "../components/license/open-camera";
 import SelectOrientation from "../components/SelectOrientation";
+import DownloadDriver from "../components/DownloadDriver";
 
 
 const Router: React.FC = () => {
@@ -30,6 +31,7 @@ const Router: React.FC = () => {
       <Route path="/scan-result" element={<ScanResult />} />
       <Route path="/quick-q&a" element={<Qa />} />
       <Route path="/final-status" element={<FinalStatus />} />
+      <Route path="/Download-driver-app" element={<DownloadDriver />} />
     </Routes>
   );
 };

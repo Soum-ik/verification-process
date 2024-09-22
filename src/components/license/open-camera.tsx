@@ -3,13 +3,13 @@ import useGoBack from '../../Hooks/useGoBack';
 import { IoCloseSharp } from "react-icons/io5";
 import WebcamCapture from "../webCamp";
 import CaptureButton from "../shared/CaptureButton";
-import { useParams } from 'react-router-dom'
+// import { useParams } from 'react-router-dom'
 
 const OpenCamera = () => {
-    const { id } = useParams()
+    // const { id } = useParams()
     const goBack = useGoBack();
     
-    const [currentPage, setcurrentPage] = useState<Number>(1);
+    const [currentPage] = useState<Number>(1);
     let currentSide = currentPage === 1 ? 'Front side' : 'Back side';
 
     return (

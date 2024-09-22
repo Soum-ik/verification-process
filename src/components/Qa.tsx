@@ -3,7 +3,7 @@ import { QuestionComponentProps, QuestionData } from "../interface/QA.interface"
 import Button from "./shared/Button";
 
 const Qa = () => {
-    const [questions, setQuestions] = useState<QuestionData[]>([
+    const [questions] = useState<QuestionData[]>([
         {
             id: 'q1',
             question: 'Have you had any accidents in the past 3-4 years?',
@@ -48,6 +48,10 @@ const Qa = () => {
 
 
     const [answers, setAnswers] = useState<{ [key: string]: string }>({});
+
+
+    console.log(answers);
+    
 
     // Handler to update the answer
     const handleAnswerChange = (questionId: string, answer: string) => {
