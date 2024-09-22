@@ -16,9 +16,7 @@ const Router: React.FC = () => {
     <Routes>
       <Route path="/" element={<LandingPage />} />
 
-
       {/* for capture license start */}
-
       <Route path="/capture-license" element={<Capturelicense />} />
       <Route path="/Orientation" element={<SelectOrientation />} />
       <Route path="/open-camera/:id" element={<OpenCamera />} />

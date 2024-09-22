@@ -14,7 +14,7 @@ function SelectOrientation() {
     };
 
     return (
-        <div className="min-h-[65vh] flex items-center flex-col mx-auto">
+        <div className="min-h-[65vh]  flex items-center justify-center flex-col mx-auto p-[20px]">
             <div className="w-full flex items-end justify-end">
                 <div onClick={goBack}>
                     <IoCloseSharp className="size-[24px] opacity-70 cursor-pointer" />
@@ -30,7 +30,7 @@ function SelectOrientation() {
                 </p>
             </div>
 
-            <div className="flex items-center justify-center flex-col w-full  my-[40px]">
+            <div className="flex items-center justify-center flex-col w-full  pt-[40px]">
                 <label
                     className={`mt-[5px] w-full flex items-center justify-between px-[16px] py-[12px] border-2 rounded-md border-borderColor ${selectedOrientation === 'landscape' ? 'border-blue-500' : ''
                         }`}
@@ -44,7 +44,7 @@ function SelectOrientation() {
                             onChange={() => handleSelection('landscape')}
                             required
                         />
-                        <span className="ml-2 text-gray-700 text-[12px]">Landscape</span>
+                        <span className="ml-2 text-paraColor text-[16px] font-semibold">Landscape</span>
                     </div>
                     <img className="size-[79px]" src={image1} alt="Landscape" />
                 </label>
@@ -62,7 +62,7 @@ function SelectOrientation() {
                             onChange={() => handleSelection('portrait')}
                             required
                         />
-                        <span className="ml-2 text-gray-700 text-[12px]">Portrait</span>
+                        <span className="ml-2 text-paraColor text-[16px] font-semibold">Portrait</span>
                     </div>
                     <img className="size-[79px]" src={image2} alt="Portrait" />
                 </label>
