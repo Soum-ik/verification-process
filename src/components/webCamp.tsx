@@ -20,11 +20,13 @@ const WebcamCapture = () => {
       // Check if `navigator.mediaDevices` is supported
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         const stream = await navigator.mediaDevices.getUserMedia({
-          preferCurrentTab : true,
-          video: true
+          preferCurrentTab: true,
+          video: {
+            facingMode: { ideal: "environment" } // Use the back camera
+          }
         });
         console.log(stream, ' get the stram');
-        
+
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
           videoRef.current.play();
