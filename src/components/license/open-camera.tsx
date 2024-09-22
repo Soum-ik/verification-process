@@ -12,7 +12,7 @@ const OpenCamera = () => {
 
 
     const goBack = useGoBack();
-    const { canvasRef, captureImage, capturedImage, resetState, videoRef } = useWebcamCapture()
+    const { canvasRef,   capturedImage, resetState, videoRef } = useWebcamCapture()
 
     const [image, setimage] = useState('');
 

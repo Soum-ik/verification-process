@@ -8,7 +8,7 @@ const WebcamCapture = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
-  const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  // const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
   useEffect(() => {
     startWebcam();
@@ -49,29 +49,29 @@ const WebcamCapture = () => {
     }
   };
 
-  const captureImage = () => {
-    if (canvasRef.current && videoRef.current) {
-      const canvas = canvasRef.current;
-      const context = canvas.getContext("2d");
+  // const captureImage = () => {
+  //   if (canvasRef.current && videoRef.current) {
+  //     const canvas = canvasRef.current;
+  //     const context = canvas.getContext("2d");
 
-      if (context && videoRef.current?.videoWidth && videoRef.current?.videoHeight) {
-        canvas.width = videoRef.current.videoWidth;
-        canvas.height = videoRef.current.videoHeight;
+  //     if (context && videoRef.current?.videoWidth && videoRef.current?.videoHeight) {
+  //       canvas.width = videoRef.current.videoWidth;
+  //       canvas.height = videoRef.current.videoHeight;
 
-        context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-        const imageDataUrl = canvas.toDataURL("image/jpeg");
+  //       context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+  //       const imageDataUrl = canvas.toDataURL("image/jpeg");
 
-        setCapturedImage(imageDataUrl);
-        stopWebcam();
-      }
-    }
-  };
+  //       setCapturedImage(imageDataUrl);
+  //       stopWebcam();
+  //     }
+  //   }
+  // };
 
-  const resetState = () => {
-    stopWebcam();
-    setCapturedImage(null);
-    startWebcam();
-  };
+  // const resetState = () => {
+  //   stopWebcam();
+  //   setCapturedImage(null);
+  //   startWebcam();
+  // };
 
   return (
     <div className=" relative  top-0 h-screen w-screen  overflow-hidden">
