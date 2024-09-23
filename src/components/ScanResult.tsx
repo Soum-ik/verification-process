@@ -20,7 +20,7 @@ function ScanResult() {
     };
 
 
-    return <div className="min-h-[65vh] pt-[50px] flex  items-center  justify-center  flex-col mx-auto ">
+    return <div className="min-h-[65vh] pt-[50px] flex  items-center  justify-center  flex-col mx-auto mb-[20px]">
         <h1 className=" font-Inter text-headingColor  pb-[10px] font-bold text-[24px] text-center leading-[30px]">Scan Result</h1>
         <div className=" w-[355px] pt-[32px]">
             <h4 className=" text-[#6F6464]  text-[14px] font-bold font-Inter leading-normal">Driver’s license</h4>

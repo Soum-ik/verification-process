@@ -30,6 +30,9 @@ const OpenCamera = () => {
   function nextForBackSideImageCapture() {
     setCurrentPage(2)
     startWebcam()
+    if (currentPage === 2) {
+      navigate('/capture-passport')
+    }
   }
 
   console.log(frontImage, "frontimage");

@@ -9,6 +9,7 @@ import FinalStatus from "../components/FinalStatus";
 import OpenCamera from "../components/license/open-camera";
 import SelectOrientation from "../components/SelectOrientation";
 import DownloadDriver from "../components/DownloadDriver";
+import OpenPassport from "../components/OpenPassport";
 
 
 const Router: React.FC = () => {
@@ -26,6 +27,9 @@ const Router: React.FC = () => {
 
 
       <Route path="/capture-passport" element={<Capturepassport />} />
+      <Route path="/open-camera-passport" element={<OpenPassport />} />
+
+
       <Route path="/scan-result" element={<ScanResult />} />
       <Route path="/quick-q&a" element={<Qa />} />
       <Route path="/final-status" element={<FinalStatus />} />

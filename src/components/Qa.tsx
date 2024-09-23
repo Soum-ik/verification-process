@@ -62,7 +62,7 @@ const Qa = () => {
     };
 
 
-    return <div className="min-h-[80vh] mt-[30px]  flex  items-center  justify-center  flex-col mx-auto">
+    return <div className="min-h-[80vh] mt-[30px]  flex  items-center  justify-center  flex-col mx-auto w-[360px] mb-[20px]">
         <h1 className=" font-Inter text-headingColor  pb-[10px] font-bold text-[24px] text-center leading-[30px]">Quick Q&A</h1>
         <p className=" text-center text-[#6F6464] font-Inter text-[14px] font-normal leading-[18px]">Just answer the questions and we are done</p>
         <div className=" space-y-[40px] mt-[32px]">
@@ -72,7 +72,7 @@ const Qa = () => {
                 ))
             }
         </div>
-        <div className="flex items-start space-x-3 bg-white rounded-md max-w-md pt-[40px]">
+        <div className="flex items-start space-x-3 bg-white rounded-md max-w-md pt-[40px] ">
             <input
                 type="checkbox"
                 className="form-checkbox  size-[24px] text-blue-600 rounded-sm border-gray-300 focus:ring-blue-500"

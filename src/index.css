@@ -22,3 +22,8 @@
     background: var(--apps-status-tags-color-danger, #F00);
     box-shadow: 0px 0px 20px 0px rgba(255, 0, 0, 0.40);
 }
+
+.passport-capture {
+    width: 335px;
+    height: 475.7px;
+}
