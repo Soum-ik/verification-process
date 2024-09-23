@@ -3,7 +3,7 @@ import { GoDotFill } from "react-icons/go";
 interface GuidenceDetails {
     title: string,
     rules: string[],
-    shortDescription?: Boolean
+    shortDescription?: boolean
 }
 
 
@@ -16,7 +16,7 @@ const CaptureGuidence = ({ title, rules, shortDescription }: GuidenceDetails) =>
             </div>
             <div className=" rounded-lg border-2 border-[#F6F6F6] p-[20px] space-y-[10px]">
                 <h5 className="text-[#6F6464]  text-[14px] font-bold font-Inter leading-normal ">Note</h5>
-                {rules.map((item, idx: any) => (
+                {rules.map((item: string, idx: number) => (
                     <h1 key={idx} className=" flex items-center space-x-[10px]"><GoDotFill className="  text-[#999]" /><span className=" font-Inter text-[12px] leading-[16px] font-normal text-headingColor"> {item}</span></h1>
                 ))}
             </div>

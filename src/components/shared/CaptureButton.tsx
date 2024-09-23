@@ -1,14 +1,18 @@
-import React from 'react';
+import React from "react";
 
 type CaptureButtonProps = {
-    onClick: () => void;
+  onClick: () => void;
 };
 
-
 const CaptureButton: React.FC<CaptureButtonProps> = ({ onClick }) => {
-    return <button onClick={onClick} className=" cursor-pointer relative  size-[50px] bg-[#FF0000] shadow-md shadow-[#6e3838]  rounded-full z-[10] border-2 border-white">
-        <div className=" transform rounded-full absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white size-[14px] "></div>
-    </button>;
+  return (
+    <button
+      onClick={onClick}
+      className="relative z-[10] border-style"
+    >
+      <div className="absolute left-1/2 top-1/2 size-[14px] -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-white"></div>
+    </button>
+  );
 };
 
 export default CaptureButton;

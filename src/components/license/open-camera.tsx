@@ -1,125 +1,136 @@
-import { useState } from "react";
-import useGoBack from '../../Hooks/useGoBack';
+import { useEffect, useState } from "react";
+// import useGoBack from "../../Hooks/useGoBack";
 import { IoCloseSharp } from "react-icons/io5";
 import CaptureButton from "../shared/CaptureButton";
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from "react-router-dom";
 import { useWebcamCapture } from "../../Hooks/useWebCamp";
 
 const OpenCamera = () => {
-    const { id } = useParams()
-
-    console.log(id);
-
-
-    const goBack = useGoBack();
-    const { canvasRef,   capturedImage, resetState, videoRef } = useWebcamCapture()
-
-    const [image, setimage] = useState('');
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const { canvasRef, videoRef, captureCenterArea, frontImage, backImage, resetAllImages, resetBackImage, resetFrontImage, startWebcam } = useWebcamCapture(id);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const currentSide = currentPage === 1 ? "Front side" : "Back side";
+  const [inReviewMode, setinReviewMode] = useState<boolean>(false);
 
 
-    const captureCenterArea = () => {
-        const canvas = canvasRef.current;
-        const video = videoRef.current;
-
-        if (canvas && video) {
-            const context = canvas.getContext("2d");
-            const videoWidth = video.videoWidth;
-            const videoHeight = video.videoHeight;
-
-            let captureWidth
-            let captureHeight
-
-            if (id === 'landscape') {
-                console.log('landscape');
-
-                captureWidth = 335;
-                captureHeight = 200;
-            } else {
-                console.log('portrait');
-
-                captureWidth = 240;
-                captureHeight = 402;
-            }
-
-            const startX = (videoWidth - captureWidth) / 2;
-            const startY = (videoHeight - captureHeight) / 2;
-
-            // Set canvas size and draw the image from the video
-            canvas.width = captureWidth;
-            canvas.height = captureHeight;
-            if (context) {
-                context.drawImage(video, startX, startY, captureWidth, captureHeight, 0, 0, captureWidth, captureHeight);
-                const imageDataUrl = canvas.toDataURL("image/png");
-                setimage(imageDataUrl)
-                console.log("Captured Image URL:", imageDataUrl);
-            }
-
-        }
-    };
-
-    const [currentPage] = useState<Number>(1);
-    let currentSide = currentPage === 1 ? 'Front side' : 'Back side';
+  function goBack() {
+    if (currentPage === 1) {
+      resetFrontImage()
+      resetAllImages()
+      return navigate(-1);
+    } else {
+      resetBackImage()
+      setinReviewMode(true)
+      return setCurrentPage(1)
+    }
+  }
 
 
-    return (
-        <div className="  relative w-full font-Inter min-h-screen pt-[20px] flex items-center justify-between flex-col mx-auto">
-            <div className="p-[20px] w-full  flex items-center justify-between  ">
-                <div className=" flex flex-col">
-                    {`${currentPage} / 2`}
-                    <p className=" font-Inter text-[18px] font-semibold leading-normal">{currentSide}</p>
-                </div>
-                <div onClick={goBack}>
-                    <IoCloseSharp className="size-[24px] opacity-70" />
-                </div>
-            </div>
-            <div className="absolute top-0    w-full overflow-hidden">
+  function nextForBackSideImageCapture() {
+    setCurrentPage(2)
+    startWebcam()
+  }
 
-                <div
-                    className={`absolute inset-0 bg-[#D9D9D9] opacity-90 z-10`}
-                    style={{
-                        clipPath: `path('M 0 0 H ${window.innerWidth} V ${window.innerHeight} H 0 V 0 M 50% 50% m -${id === 'landscape' ? 167.5 : 120}px -${id === 'landscape' ? 100 : 201}px h ${id === 'landscape' ? 335 : 240}px v ${id === 'landscape' ? 200 : 402}px h -${id === 'landscape' ? 335 : 240}px Z')`
-                    }}
-                ></div>
+  console.log(frontImage, "frontimage");
+  console.log(backImage, "backimage")
 
-                <video
-                    ref={videoRef}
-                    autoPlay
-                    muted
-                    playsInline
-                    className="absolute inset-0 w-full h-full object-cover z-0"
-                />
-                {/* Clear center area
-                // <div className={` ${id === 'landscape' ? 'w-[335px]  h-[200px]' : 'w-[240px]  h-[402px]'}   absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50  rounded-lg shadow-lg overflow-hidden `}>
-                //     This div allows capturing the central area
-                // </div> */}
 
-                {/* Clear center area */}
-                <div
-                    className={` ${id === 'landscape' ? 'w-[335px]  h-[200px]' : 'w-[240px]  h-[402px]'
-                        } absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 rounded-lg shadow-lg overflow-hidden`}
-                >
-                </div>
+  // reset the image to take image again
+  function restImage() {
+    if (currentPage === 1) {
+      setinReviewMode(false)
+      resetFrontImage()
+    } else {
+      setinReviewMode(false)
+      resetBackImage()
+    }
+  }
 
-                <canvas ref={canvasRef} className="hidden" />
+  useEffect(() => {
+    if (frontImage !== null) {
+      setinReviewMode(true);
+    }
+  }, [frontImage]);
+
+  useEffect(() => {
+    if (backImage !== null) {
+      setinReviewMode(true);
+    }
+  }, [backImage]);
 
 
 
-                {/* Reset Button */}
-                {capturedImage && (
-                    <button
-                        onClick={resetState}
-                        className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-30 p-2 bg-white text-black rounded"
-                    >
-                        Reset
-                    </button>
-                )}
-            </div>
+
+  useEffect(() => {
+    if (currentPage === 2) {
+      setinReviewMode(false)
+    }
+  }, [currentPage]);
 
 
-            <img src={image} alt="" />
-            <CaptureButton onClick={captureCenterArea} />
+
+  return (
+    <div className="relative w-[360px] mx-auto flex min-h-screen  flex-col items-center justify-between  pt-[20px] font-Inter">
+      {/* for heading */}
+      <div className="absolute top-0 z-50 flex w-full items-center justify-between p-[20px]">
+        <div className="flex flex-col">
+          {`${currentPage} / 2`}
+          <p className="font-Inter text-[18px] font-semibold leading-normal">
+            {currentSide}
+          </p>
         </div>
-    )
+        <div onClick={goBack}>
+          <IoCloseSharp className="size-[24px] opacity-70" />
+        </div>
+      </div>
+
+
+      {!inReviewMode ? <>
+        <div className="absolute top-0 h-full w-full overflow-hidden">
+          <canvas ref={canvasRef} className="hidden" />
+          <div
+            className={` ${id === "landscape" ? "h-[200px] w-[335px]" : "h-[402px] w-[240px]"} absolute left-1/2 top-1/2 z-40 -translate-x-1/2 -translate-y-1/2 transform overflow-hidden rounded-lg border-2 shadow-lg`}
+          >
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            playsInline
+            className="absolute  top-0 z-30 h-full w-full object-cover"
+          />
+          </div>
+        </div>
+
+        <div className="absolute bottom-[110px]  w-full flex items-center justify-between ">
+          <button className=" cursor-default z-50 mx-[20px] w-full rounded-md bg-[rgba(21,21,21,0.50)] px-[12px] py-[10px] text-center font-Inter text-[14px] font-medium leading-[18px] text-[#fff]">
+            Position your ID within the box
+          </button>
+        </div>
+
+        <div className=" z-[40]  absolute bottom-[40px]">
+          <CaptureButton onClick={captureCenterArea} />
+        </div>
+      </> : <>
+        <div className="  absolute top-0 w-full h-full  object-cover flex items-center justify-center flex-col">
+          {currentPage === 1 && frontImage && (
+            <img className="rounded-lg" src={frontImage} alt="Front" />
+          )}
+          {currentPage === 2 && backImage && (
+            <img className="rounded-lg" src={backImage} alt="Back" />
+          )}
+
+          <div className=" mt-[40px] space-x-[10px] w-full flex items-center justify-center mx-auto">
+            <button onClick={() => restImage()} className=" text-[#999]  text-[14px] font-semibold w-full px-[14px] py-[8px]"> Retake</button>
+            <button onClick={() => nextForBackSideImageCapture()} className=" w-full rounded-md px-[14px]  py-[8px]  bg-brandColor text-white font-semibold text-[14px] font-Inter">Next</button>
+          </div>
+        </div>
+      </>}
+
+
+
+    </div>
+  );
 };
 
 export default OpenCamera;
