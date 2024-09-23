@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { QuestionComponentProps, QuestionData } from "../interface/QA.interface";
+import {  QuestionData } from "../interface/QA.interface";
 import Button from "./shared/Button";
 
 const Qa = () => {
@@ -20,25 +20,26 @@ const Qa = () => {
                 { label: 'No', value: 'no' },
             ],
         },
+        // Remove duplicates or ensure each question has a unique ID
         {
-            id: 'q2',
-            question: 'Do you have a valid driving license?',
+            id: 'q3',
+            question: 'Are you willing to drive for long distances?',
             options: [
                 { label: 'Yes', value: 'yes' },
                 { label: 'No', value: 'no' },
             ],
         },
         {
-            id: 'q2',
-            question: 'Do you have a valid driving license?',
+            id: 'q4',
+            question: 'Do you have any previous driving experience?',
             options: [
                 { label: 'Yes', value: 'yes' },
                 { label: 'No', value: 'no' },
             ],
         },
         {
-            id: 'q2',
-            question: 'Do you have a valid driving license?',
+            id: 'q5',
+            question: 'Have you ever received a traffic violation?',
             options: [
                 { label: 'Yes', value: 'yes' },
                 { label: 'No', value: 'no' },
@@ -46,12 +47,9 @@ const Qa = () => {
         },
     ]);
 
-
     const [answers, setAnswers] = useState<{ [key: string]: string }>({});
 
-
     console.log(answers);
-    
 
     // Handler to update the answer
     const handleAnswerChange = (questionId: string, answer: string) => {
@@ -61,46 +59,49 @@ const Qa = () => {
         }));
     };
 
-
-    return <div className="min-h-[80vh] mt-[30px]  flex  items-center  justify-center  flex-col mx-auto w-[360px] mb-[20px]">
-        <h1 className=" font-Inter text-headingColor  pb-[10px] font-bold text-[24px] text-center leading-[30px]">Quick Q&A</h1>
-        <p className=" text-center text-[#6F6464] font-Inter text-[14px] font-normal leading-[18px]">Just answer the questions and we are done</p>
-        <div className=" space-y-[40px] mt-[32px]">
-            {
-                questions.map((question, idx) => (
-                    <QuestionComponent handleAnswerChange={handleAnswerChange} questionData={question} key={idx} />
-                ))
-            }
-        </div>
-        <div className="flex items-start space-x-3 bg-white rounded-md max-w-md pt-[40px] ">
-            <input
-                type="checkbox"
-                className="form-checkbox  size-[24px] text-blue-600 rounded-sm border-gray-300 focus:ring-blue-500"
-            />
-            <p className="text-paraColor text-[12px] font-normal leading-[16px] font-Inter">
-                To the best of my knowledge I have provided accurate information about myself.
+    return (
+        <div className="min-h-[80vh] mt-[30px] flex items-center justify-center flex-col mx-auto  p-[20px]">
+            <h1 className="font-Inter text-headingColor pb-[10px] font-bold text-[24px] text-center leading-[30px]">
+                Quick Q&A
+            </h1>
+            <p className="text-center text-[#6F6464] font-Inter text-[14px] font-normal leading-[18px]">
+                Just answer the questions and we are done
             </p>
+            <div className="space-y-[40px] mt-[32px]">
+                {questions.map((question, idx: number) => (
+                    <QuestionComponent
+                        handleAnswerChange={handleAnswerChange}
+                        questionData={question}
+                        key={question.id} // Use unique question ID as key
+                        selectedAnswer={answers[question.id]} // Pass the selected answer
+                    />
+                ))}
+            </div>
+            <div className="flex items-start space-x-3 bg-white rounded-md max-w-md pt-[40px]">
+                <input
+                    type="checkbox"
+                    className="form-checkbox size-[24px] text-blue-600 rounded-sm border-gray-300 focus:ring-blue-500"
+                />
+                <p className="text-paraColor text-[12px] font-normal leading-[16px] font-Inter">
+                    To the best of my knowledge I have provided accurate information about myself.
+                </p>
+            </div>
+            <Button text="Finish" link="/final-status" />
         </div>
-        <Button text="Finish" link="/final-status" />
-    </div>;
+    );
 };
 
-export default Qa;
-
-
-
-
-const QuestionComponent = ({ questionData, handleAnswerChange }: QuestionComponentProps) => {
-
+const QuestionComponent = ({ questionData, handleAnswerChange, selectedAnswer }: any) => {
     return (
-        <div className="">
+        <div>
             <h1 className="text-headingColor self-stretch font-Inter text-[14px] font-normal leading-[18px]">
                 {questionData.question}
             </h1>
-            {questionData.options?.map((option: any, index: any) => (
+            {questionData.options?.map((option: any, index: number) => (
                 <label
                     key={index}
-                    className="mt-[5px] flex items-center px-[16px] py-[12px] border-2 rounded-md border-borderColor"
+                    className={`mt-[5px] flex items-center px-[16px] py-[12px] border-2 rounded-md ${selectedAnswer === option.value ? 'border-blue-600' : 'border-borderColor'
+                        }`}
                 >
                     <input
                         type="radio"
@@ -108,14 +109,14 @@ const QuestionComponent = ({ questionData, handleAnswerChange }: QuestionCompone
                         value={option.value}
                         className="form-radio size-[18px] text-blue-600"
                         onChange={() => handleAnswerChange(questionData.id, option.value)}
+                        checked={selectedAnswer === option.value} // Set checked state
                         required
                     />
                     <span className="ml-2 text-gray-700 text-[12px]">{option.label}</span>
                 </label>
             ))}
         </div>
-
     );
 };
 
-
+export default Qa;
