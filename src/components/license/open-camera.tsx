@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 // import useGoBack from "../../Hooks/useGoBack";
 import { IoCloseSharp } from "react-icons/io5";
 import CaptureButton from "../shared/CaptureButton";
@@ -12,6 +12,23 @@ const OpenCamera = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const currentSide = currentPage === 1 ? "Front side" : "Back side";
   const [inReviewMode, setinReviewMode] = useState<boolean>(false);
+  const bgVideo = useRef<HTMLVideoElement>(null);
+
+  const OpenCamera = async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      preferCurrentTab: true,
+      video: {
+        facingMode: { ideal: 'environment' },
+      },
+    });
+
+    if (videoRef.current) {
+      videoRef.current.srcObject = stream;
+      videoRef.current.play();
+    }
+  }
+
+  OpenCamera()
 
 
   function goBack() {
@@ -31,7 +48,7 @@ const OpenCamera = () => {
     setCurrentPage(2)
     startWebcam()
     if (currentPage === 2) {
-      navigate('/capture-passport')
+      navigate('/face-scaning')
     }
   }
 
@@ -73,6 +90,8 @@ const OpenCamera = () => {
 
 
 
+
+
   return (
     <div className="relative w-[360px] mx-auto flex min-h-screen  flex-col items-center justify-between  pt-[20px] font-Inter">
       {/* for heading */}
@@ -95,14 +114,18 @@ const OpenCamera = () => {
           <div
             className={` ${id === "landscape" ? "h-[200px] w-[335px]" : "h-[402px] w-[240px]"} absolute left-1/2 top-1/2 z-40 -translate-x-1/2 -translate-y-1/2 transform overflow-hidden rounded-lg border-2 shadow-lg`}
           >
-          <video
-            ref={videoRef}
-            autoPlay
-            muted
-            playsInline
-            className="absolute  top-0 z-30 h-full w-full object-cover"
-          />
+            <video
+              ref={videoRef}
+              autoPlay
+              muted
+              playsInline
+              className="absolute  top-0 z-30 h-full w-full object-cover"
+            />
           </div>
+          <video ref="bgVideo" autoPlay
+            className="absolute  top-0 z-30 h-full w-full object-cover"
+            muted
+            playsInline></video>
         </div>
 
         <div className="absolute bottom-[110px]  w-full flex items-center justify-between ">

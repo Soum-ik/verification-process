@@ -12,6 +12,7 @@
     "start": "set HTTPS=true&&vite --host"
   },
   "dependencies": {
+    "face-api.js": "^0.22.2",
     "i": "^0.3.7",
     "npm": "^10.8.3",
     "react": "^18.3.1",

@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import LandingPage from "../components/LandingPage";
 import Capturelicense from "../components/license/Capturelicense";
-import FaceScaning from "../components/FaceScaning";
+import FaceScaning from "../components/facescanning/FaceScaning";
 import Capturepassport from "../components/CapturePassport";
 import ScanResult from "../components/ScanResult";
 import Qa from "../components/Qa";
@@ -10,6 +10,7 @@ import OpenCamera from "../components/license/open-camera";
 import SelectOrientation from "../components/SelectOrientation";
 import DownloadDriver from "../components/DownloadDriver";
 import OpenPassport from "../components/OpenPassport";
+import OpenCamearaFacing from "../components/facescanning/Open-Cameara-Facing";
 
 
 const Router: React.FC = () => {
@@ -22,8 +23,10 @@ const Router: React.FC = () => {
       <Route path="/Orientation" element={<SelectOrientation />} />
       <Route path="/open-camera/:id" element={<OpenCamera />} />
 
-      {/* for capture license end */}
+      {/* for capture license start */}
       <Route path="/face-scaning" element={<FaceScaning />} />
+      <Route path="/open-face-recogation-camera" element={<OpenCamearaFacing />} />
+      {/* for capture license end */}
 
 
       <Route path="/capture-passport" element={<Capturepassport />} />

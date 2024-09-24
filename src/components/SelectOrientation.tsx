@@ -14,7 +14,7 @@ function SelectOrientation() {
     };
 
     return (
-        <div className="min-h-[65vh]  flex items-center justify-center flex-col mx-auto p-[20px]">
+        <div className="min-h-[65vh] flex items-center justify-center flex-col mx-auto p-[20px]">
             <div className="w-full flex items-end justify-end">
                 <div onClick={goBack}>
                     <IoCloseSharp className="size-[24px] opacity-70 cursor-pointer" />
@@ -32,7 +32,7 @@ function SelectOrientation() {
 
             <div className="flex items-center justify-center flex-col w-full  pt-[40px]">
                 <label
-                    className={`mt-[5px] w-full flex items-center justify-between px-[16px] py-[12px] border-2 rounded-md border-borderColor ${selectedOrientation === 'landscape' ? 'border-blue-500' : ''
+                    className={`mt-[5px] w-full flex items-center justify-between px-[16px] py-[12px]  border-[2px] rounded-md  ${selectedOrientation === 'landscape' ? '   border-brandColor' : ''
                         }`}
                     onClick={() => handleSelection('landscape')}
                 >
@@ -50,7 +50,7 @@ function SelectOrientation() {
                 </label>
 
                 <label
-                    className={`mt-[5px] w-full flex items-center justify-between px-[16px] py-[12px] border-2 rounded-md border-borderColor ${selectedOrientation === 'portrait' ? 'border-blue-500' : ''
+                    className={`mt-[5px] w-full flex items-center justify-between px-[16px] py-[12px] border-[2px] rounded-md  ${selectedOrientation === 'portrait' ? ' border-blue-500' : ''
                         }`}
                     onClick={() => handleSelection('portrait')}
                 >

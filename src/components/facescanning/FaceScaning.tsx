@@ -1,7 +1,7 @@
-import face from '../../public/gifs/Face GIF.gif'
+import face from '../../../public/gifs/Face GIF.gif'
 
-import Button from "./shared/Button";
-import CaptureGuidence from "./shared/CaptureGuidence";
+import Button from "../shared/Button";
+import CaptureGuidence from "../shared/CaptureGuidence";
 
 const FaceScaning = () => {
 
@@ -16,7 +16,7 @@ const FaceScaning = () => {
             <img src={face} alt="" />
         </div>
         <CaptureGuidence title='Scan your face' rules={rules} />
-        <Button link='/open-camera' style='mt-[16px]' text='Start scanning' />
+        <Button link='/open-face-recogation-camera' style='mt-[16px]' text='Start scanning' />
     </div>;
 };
 

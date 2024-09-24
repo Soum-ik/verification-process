@@ -27,3 +27,20 @@
     width: 335px;
     height: 475.7px;
 }
+
+.face-recogation {
+    width: 260px;
+    height: 260px;
+    border-radius: 812.5px;
+    /* background: var(--Apps-Primary-Color-Light-blue, #B8CBFC); */
+}
+
+
+.mask2 {
+    -webkit-mask-image: radial-gradient(circle, black 50%, rgba(0, 0, 0, 0.5) 50%);
+    mask-image: radial-gradient(circle, black 0px, rgba(0, 0, 0, 0.5) 0px);
+}
+
+.div-mask {
+    mask: none;
+}

@@ -5,7 +5,7 @@ import passAction from '../../public/pass.svg'
 import failAction from '../../public/fail.svg'
 
 
- 
+
 
 import H1 from './shared/H1';
 import { ReactNode } from 'react';
@@ -30,7 +30,7 @@ const FinalStatus = () => {
         {
             title: 'Compatibility',
             details: [{ "Required to pass": "50%" }, { "Earned score": "40%" }],
-            status: true,
+            status: false,
         },
     ];
 
@@ -74,7 +74,7 @@ const StatusCard = ({ title, details, status }: any) => {
                 <h3 className="font-Inter text-headingColor    font-bold text-[14px]  leading-normal">{title}</h3>
                 {details && (
                     <div className="mt-1 text-sm text-gray-500">
-                        {details.map((detail: any, index: any) => (
+                        {details.map((detail: any, index: number) => (
                             <div key={index} className="flex">
                                 {Object.entries(detail).map(([key, value]) => (
                                     <div key={key} className=''>
