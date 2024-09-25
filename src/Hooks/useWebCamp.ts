@@ -10,6 +10,8 @@ export const useWebcamCapture = (id: string | undefined, currentPage?: number | 
     const [isWebcamActive, setIsWebcamActive] = useState(false);
     const [isReviewVisible, setIsReviewVisible] = useState(false); // State to control the visibility of the review
 
+    const bgVideoRef = useRef<HTMLVideoElement>(null);
+
 
     useEffect(() => {
         if (!isWebcamActive) {
@@ -33,8 +35,13 @@ export const useWebcamCapture = (id: string | undefined, currentPage?: number | 
                 });
 
                 if (videoRef.current) {
+
                     videoRef.current.srcObject = stream;
                     videoRef.current.play();
+                }
+                if (bgVideoRef.current) {
+                    bgVideoRef.current.srcObject = stream
+                    bgVideoRef.current.play()
                 }
                 setMediaStream(stream);
                 setIsWebcamActive(true);
@@ -65,36 +72,12 @@ export const useWebcamCapture = (id: string | undefined, currentPage?: number | 
             const videoWidth = video.videoWidth;
             const videoHeight = video.videoHeight;
 
-            let captureWidth;
-            let captureHeight;
+            // Set canvas size to match video size
+            canvas.width = videoWidth;
+            canvas.height = videoHeight;
 
-            if (id === "landscape") {
-                captureWidth = 335;
-                captureHeight = 200;
-            } else {
-
-                captureWidth = 240;
-                captureHeight = 402;
-            }
-
-            const startX = (videoWidth - captureWidth) / 2;
-            const startY = (videoHeight - captureHeight) / 2;
-
-            // Set canvas size and draw the image from the video
-            canvas.width = captureWidth;
-            canvas.height = captureHeight;
             if (context) {
-                context.drawImage(
-                    video,
-                    startX,
-                    startY,
-                    captureWidth,
-                    captureHeight,
-                    0,
-                    0,
-                    captureWidth,
-                    captureHeight,
-                );
+                context.drawImage(video, 0, 0, videoWidth, videoHeight);
                 const imageDataUrl = canvas.toDataURL("image/png");
                 if (!isFrontCaptured) {
                     setFrontImage(imageDataUrl);
@@ -138,6 +121,7 @@ export const useWebcamCapture = (id: string | undefined, currentPage?: number | 
         frontImage,
         backImage,
         startWebcam,
+        bgVideoRef,
         isReviewVisible
     };
 };

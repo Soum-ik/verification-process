@@ -44,3 +44,9 @@
 .div-mask {
     mask: none;
 }
+
+.gif-size {
+    width: 69px;
+    height: 90px;
+    flex-shrink: 0;
+}
