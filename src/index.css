@@ -50,3 +50,37 @@
     height: 90px;
     flex-shrink: 0;
 }
+
+.loadingDiv {
+    display: flex;
+    width: 300px;
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    border-radius: 6px;
+    background: var(--Apps-Background-Color-White, #FFF);
+
+    /* Popup shadow */
+    box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.14);
+}
+
+.loadingEl {
+    display: flex;
+    width: 48px;
+    height: 48px;
+    justify-content: center;
+    align-items: center;
+}
+
+.loadingTextsize {
+    color: var(--apps-texts-icons-color-light-black, #303030);
+    text-align: center;
+
+    /* Apps/Title/Small title 18 */
+    font-family: Inter;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}

@@ -47,7 +47,7 @@ const FinalStatus = () => {
             </div>}
         </div>
 
-        <div className='w-full mt-[32px]'>
+        <div className=' mt-[32px] w-[360px]'>
             {statusData.map((item, index) => (
                 <StatusCard
                     key={index}

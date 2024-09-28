@@ -124,12 +124,12 @@ const OpenCamera = () => {
           <CaptureButton onClick={captureCenterArea} />
         </div>
       </> : <>
-        <div className="  absolute top-0 w-full h-full  object-cover flex items-center justify-center flex-col">
+        <div className="  absolute top-0 w-[360px] h-full  object-cover flex items-center justify-center flex-col">
           {currentPage === 1 && frontImage && (
-            <img className="rounded-lg" src={frontImage} alt="Front" />
+            <img className={`${id === "landscape" ? "h-[200px] w-[335px]" : "h-[402px] w-[240px]"} rounded-lg object-cover`} src={frontImage} alt="Front" />
           )}
           {currentPage === 2 && backImage && (
-            <img className="rounded-lg" src={backImage} alt="Back" />
+            <img className={`${id === "landscape" ? "h-[200px] w-[335px]" : "h-[402px] w-[240px]"} rounded-lg object-cover`} src={backImage} alt="Back" />
           )}
 
           <div className="w-[360px] mt-[40px] space-x-[10px]  flex items-center justify-center mx-auto">

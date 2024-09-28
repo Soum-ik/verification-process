@@ -41,7 +41,7 @@ export const useFaceRecognition = () => {
             const videoHeight = videoRef.current.videoHeight;
 
             if (canvasRef.current) {
-                canvasRef.current.width = videoWidth;
+                canvasRef.current.width = videoRef.current.width;
                 canvasRef.current.height = videoHeight;
             }
 
