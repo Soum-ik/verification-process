@@ -11,7 +11,7 @@ import H1 from './shared/H1';
 import { ReactNode } from 'react';
 // import { Key } from 'react';
 const FinalStatus = () => {
-    const status = false
+    const status = true
     const statusData = [
         {
             title: 'Face',
@@ -30,7 +30,7 @@ const FinalStatus = () => {
         {
             title: 'Compatibility',
             details: [{ "Required to pass": "50%" }, { "Earned score": "40%" }],
-            status: false,
+            status: true,
         },
     ];
 

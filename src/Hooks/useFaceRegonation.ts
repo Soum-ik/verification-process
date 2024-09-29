@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import * as blazeface from '@tensorflow-models/blazeface';
 import '@tensorflow/tfjs-backend-webgl';
 
@@ -7,162 +7,50 @@ export const useFaceRecognition = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
     const [isWebcamActive, setIsWebcamActive] = useState(false);
+    const [modelLoaded, setModelLoaded] = useState(false);
 
-    // Step states
+    // to count the steps
     const [currentStep, setCurrentStep] = useState(1);
-    const [stepsCompleted, setStepsCompleted] = useState<boolean[]>([false, false, false, false]);
+    console.log('get the current step', currentStep);
 
-    useEffect(() => {
-        if (!isWebcamActive) {
-            startWebcam();
-        }
-    }, [isWebcamActive]);
 
-    useEffect(() => {
-        if (currentStep <= 4) {
-            runFaceDetection();
-        }
-    }, [currentStep]); // Run detection whenever the current step changes
+    const [videoWidth, setVideoWidth] = useState<number | null>(null);
+    const [isTeethShowing, setIsTeethShowing] = useState(false);
+    const [eyePositions, setEyePositions] = useState<{
+        leftEye: number[],
+        rightEye: number[],
+        nose: number[],
+    }>({ leftEye: [], rightEye: [], nose: [] });
+    const [hasMovedLeft, setHasMovedLeft] = useState(false);
+    const [hasMovedRight, setHasMovedRight] = useState(false);
+    const [hasVerifiedCenter, setHasVerifiedCenter] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [captureImage, setCaptureImage] = useState('');
 
+
+
+
+
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const runFaceDetection = async () => {
         const model = await blazeface.load();
-        console.log('FaceDetection Model loaded', model);
-
+        setModelLoaded(true)
         if (videoRef.current) {
-            setInterval(() => {
-                detect(model);
-            }, 100); // Adjust the interval as needed
-        }
-    };
-
-    const detect = async (model: blazeface.BlazeFaceModel) => {
-        if (videoRef.current && videoRef.current.readyState === 4) {
-            const videoWidth = videoRef.current.videoWidth;
-            const videoHeight = videoRef.current.videoHeight;
-
-            if (canvasRef.current) {
-                canvasRef.current.width = videoRef.current.width;
-                canvasRef.current.height = videoHeight;
-            }
-
-            const predictions = await model.estimateFaces(videoRef.current, false);
-
-            if (predictions.length > 0) {
-                const ctx = canvasRef.current?.getContext('2d');
-                if (ctx) {
-                    ctx.clearRect(0, 0, videoWidth, videoHeight);
-                    predictions.forEach((prediction) => {
-                        // ctx.strokeStyle = "blue";
-                        // ctx.beginPath();
-                        // ctx.rect(
-                        //     prediction.topLeft[0],
-                        //     prediction.topLeft[1],
-                        //     prediction.bottomRight[0] - prediction.topLeft[0],
-                        //     prediction.bottomRight[1] - prediction.topLeft[1]
-                        // );
-                        // ctx.stroke();
-
-                        // ctx.strokeStyle = "red";
-                        // prediction.landmarks?.forEach(landmark => {
-                        //     ctx.fillRect(landmark[0], landmark[1], 5, 5);
-                        // });
-
-                        const [leftEye, rightEye, nose, mouthLeft, mouthRight] = prediction.landmarks;
-                        // console.log(leftEye, rightEye, 'verification ');
-
-
-                        const landmarks = prediction.landmarks;
-
-                        // Assuming landmarks[2] is the upper lip and landmarks[3] is the lower lip
-                        const upperLip = landmarks[2];
-                        const lowerLip = landmarks[3];
-
-
-                        if (currentStep === 1) verifyCenter(nose, videoWidth);
-                        if (currentStep === 2) verifyTurnFace(leftEye, rightEye);
-                        if (currentStep === 3) verifyMouthOpen(upperLip, lowerLip);
-                        if (currentStep === 4) verifyFaceComplete(prediction);
-                    });
+            const detectionInterval = setInterval(() => {
+                if (currentStep === 1 && !hasVerifiedCenter) {
+                    detect(model);
+                } else if (currentStep === 2) {
+                    clearInterval(detectionInterval); // Stop when step advances
                 }
-            }
+            }, 20); // Adjust interval as needed
         }
-    };
+    }
 
-    // Verification steps
-    const verifyCenter = (nose, videoWidth) => {
-        console.log('test 1');
-
-        const centerX = videoWidth / 2;
-        const noseX = nose[0];
-        if (Math.abs(noseX - centerX) < 50) {
-            console.log('test 1 completed');
-            console.log("Step 1: Face is centered.");
-            completeStep(1);
-            console.log(currentStep, 'step checking');
-        }
-    };
-
-    const verifyTurnFace = (leftEye, rightEye) => {
-        console.log('test 2');
-
-        const eyeDistance = Math.abs(leftEye[0] - rightEye[0]);
-        if (eyeDistance < 50 || eyeDistance > 150) {
-            console.log("Step 2: Face turned left/right.");
-            completeStep(2);
-        }
-    };
-
-    const verifyMouthOpen = (upperLip, lowerLip) => {
-        console.log('Upper Lip:', upperLip);
-        console.log('Lower Lip:', lowerLip);
-
-        // Calculate the vertical distance between the upper and lower lips
-        const mouthHeight = Math.abs(lowerLip[1] - upperLip[1]);
-        console.log('Mouth Height:', mouthHeight);
-
-        let faceHeightThreshold
-        // Adjust threshold based on face size (e.g., 20% of the face height)
-        if (videoRef.current) {
-            faceHeightThreshold = videoRef.current.videoHeight * 0.1; // Adjust this value as needed
-            console.log('Threshold:', faceHeightThreshold);
-        }
-
-        if (!faceHeightThreshold) {
-            console.log('not opening');
-
-            return
-        }
-
-        if (mouthHeight > faceHeightThreshold) {
-            console.log("Step 3: Mouth is open.");
-            completeStep(3);
-        }
-    };
+    
 
 
-    const verifyFaceComplete = (prediction) => {
-        if (prediction.probability[0] > 0.40) { // Check face confidence
-            console.log("Step 4: Verification completed.");
-            completeStep(4);
-        }
-    };
-
-    const completeStep = (stepNumber: number) => {
-        if (stepsCompleted[stepNumber - 1]) return; // Prevent re-running
-
-        setStepsCompleted((prev) => {
-            const updatedSteps = [...prev];
-            updatedSteps[stepNumber - 1] = true;
-            return updatedSteps;
-        });
-
-        if (currentStep === stepNumber) {
-            setCurrentStep(stepNumber + 1); // Proceed to the next step
-        }
-    };
-
-
-    const startWebcam = async () => {
+    const startWebcam = useCallback(async () => {
         try {
             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
                 const stream = await navigator.mediaDevices.getUserMedia({
@@ -186,15 +74,194 @@ export const useFaceRecognition = () => {
         } catch (error) {
             console.error('Error accessing webcam', error);
         }
-    };
+    }, [runFaceDetection]);
 
-    const stopWebcam = () => {
+    const stopWebcam = useCallback(() => {
         if (mediaStream) {
             mediaStream.getTracks().forEach((track) => track.stop());
             setMediaStream(null);
         }
         setIsWebcamActive(false);
-    };
+    }, [mediaStream]);
+
+    useEffect(() => {
+        if (!isWebcamActive) {
+            startWebcam();
+        }
+    }, [isWebcamActive, startWebcam]);
+
+
+
+    const detect = async (model: blazeface.BlazeFaceModel) => {
+        if (videoRef.current && videoRef.current.readyState === 4) {
+            const videoWidth = videoRef.current.videoWidth;
+            const videoHeight = videoRef.current.videoHeight;
+
+            // Make sure to fetch predictions
+            const predictions = await model.estimateFaces(videoRef.current, false);
+
+            // Check if any faces were detected
+            if (predictions.length > 0) {
+                const ctx = canvasRef.current?.getContext('2d');
+
+                if (ctx) {
+                    ctx.clearRect(0, 0, videoWidth, videoHeight);
+
+                    // Ensure landmarks are of the expected type (number[][])
+                    const landmarks = predictions[0].landmarks;
+                    if (Array.isArray(landmarks) && landmarks.every(point => Array.isArray(point))) {
+                        const [leftEye, rightEye, nose, mouthLeft, mouthRight] = landmarks as number[][];
+
+
+                        // Store mouth positions in the state
+                        setEyePositions({
+                            leftEye,
+                            rightEye,
+                            nose,
+                        });
+                        setVideoWidth(videoWidth);
+
+
+                        const mouthHeight = Math.abs(mouthLeft[1] - mouthRight[1]);
+                        setIsTeethShowing(mouthHeight > 10); // Adjust threshold
+
+
+                    } else {
+                        console.error("Unexpected format for landmarks", landmarks);
+                    }
+                } else {
+                    console.error("Failed to get canvas context");
+                }
+            } else {
+                console.log("No faces detected");
+            }
+        } else {
+            console.error("Video not ready for detection");
+        }
+    }
+
+    const capturePicture = useCallback(() => {
+        if (videoRef.current && canvasRef.current) {
+            const video = videoRef.current;
+            const canvas = canvasRef.current;
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const imageDataUrl = canvas.toDataURL('image/png');
+                setCaptureImage(imageDataUrl)
+                console.log("Captured Image Data URL:", imageDataUrl);
+                // Further process the image data as needed
+            }
+        }
+    }, []);
+
+
+    const handleCaptureProcess = useCallback(() => {
+        setIsLoading(true);
+        capturePicture();
+        setTimeout(() => {
+            setIsLoading(false);
+            stopWebcam()
+        }, 5000); // 3-second delay
+    }, [capturePicture]);
+
+
+
+
+    const verifyTurnFace = useCallback(() => {
+        const centerX = (videoWidth as number) / 2;
+        const leftEyeX = eyePositions.leftEye[0];
+        const rightEyeX = eyePositions.rightEye[0];
+
+        // Check if the face has moved to the left of the center
+        if (!hasMovedLeft && (leftEyeX < centerX && rightEyeX < centerX)) {
+            console.log("Face moved to the left");
+            setHasMovedLeft(true);
+        }
+
+        // Check if the face has moved to the right of the center
+        if (!hasMovedRight && (leftEyeX > centerX && rightEyeX > centerX)) {
+            console.log("Face moved to the right");
+            setHasMovedRight(true);
+        }
+
+        if (hasMovedLeft && hasMovedRight) {
+            console.log("Step 2: Face movement from left to right verified");
+            setCurrentStep(3); // Move to the next step
+        }
+    }, [eyePositions, videoWidth, hasMovedLeft, hasMovedRight]);
+
+    const verifyCenter = useCallback(() => {
+        if (currentStep !== 1 || hasVerifiedCenter) return; // Only run if step is 1 and hasn't been verified yet
+        const nose = eyePositions.nose
+        const noseX = eyePositions.nose[0]
+        // Validate inputs
+        if (!Array.isArray(nose) || nose.length < 1) {
+            console.error('Invalid nose data:', nose);
+            return;
+        }
+        if (typeof videoWidth !== 'number' || videoWidth <= 0) {
+            console.error('Invalid videoWidth:', videoWidth);
+            return;
+        }
+
+        // Calculate center
+        const centerX = videoWidth / 2;
+
+
+        // Check if nose is centered within a 50-pixel range
+        if (Math.abs(noseX - centerX) < 40) {
+            console.log('Step 1: Nose is centered.');
+            setCurrentStep(2);
+            setHasVerifiedCenter(true)
+        } else {
+            console.log('Nose is not centered.');
+        }
+    }, [currentStep, eyePositions.nose, hasVerifiedCenter, videoWidth]);
+
+    const verifyTeethShowing = useCallback(() => {
+        if (currentStep === 3 && isTeethShowing) {
+            console.log("Teeth are showing");
+            setTimeout(() => {
+                setCurrentStep(4); // Move to the next step
+            }, 3000);
+        } else if (currentStep === 3) {
+            console.log("Teeth are not showing");
+        }
+    }, [currentStep, isTeethShowing]);
+
+    useEffect(() => {
+        if (currentStep === 2) {
+            setHasVerifiedCenter(true);
+            verifyTurnFace();  // Call the function when step is 2
+        }
+    }, [currentStep, verifyTurnFace]);
+    useEffect(() => {
+        if (currentStep === 1) {
+            // setHasVerifiedCenter(false);
+            verifyCenter();  // Call the function when step is 2
+        }
+    }, [currentStep, verifyCenter]);
+    useEffect(() => {
+        if (currentStep === 3) {
+            verifyTeethShowing();
+        }
+    }, [currentStep, verifyTeethShowing]);
+    useEffect(() => {
+        if (currentStep === 4) {
+            handleCaptureProcess();
+            setTimeout(() => {
+                stopWebcam()
+            }, 2000);
+        }
+    }, [currentStep, handleCaptureProcess, stopWebcam]);
+
+
+    
+
+
 
     return {
         videoRef,
@@ -203,6 +270,10 @@ export const useFaceRecognition = () => {
         stopWebcam,
         isWebcamActive,
         currentStep,
-        stepsCompleted
+        hasMovedRight,
+        hasMovedLeft,
+        captureImage,
+        isLoading,
+        modelLoaded
     };
 };
