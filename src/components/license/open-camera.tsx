@@ -8,7 +8,7 @@ import { useWebcamCapture } from "../../Hooks/useWebCamp";
 const OpenCamera = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { bgVideoRef, canvasRef, videoRef, captureCenterArea, frontImage, backImage, resetAllImages, resetBackImage, resetFrontImage, startWebcam } = useWebcamCapture(id);
+  const { bgVideoRef, canvasRef, videoRef, captureCenterArea, frontImage, backImage, resetAllImages, resetBackImage, resetFrontImage, startWebcam } = useWebcamCapture();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const currentSide = currentPage === 1 ? "Front side" : "Back side";
   const [inReviewMode, setinReviewMode] = useState<boolean>(false);
@@ -77,7 +77,7 @@ const OpenCamera = () => {
 
 
   return (
-    <div className="relative w-full mx-auto flex min-h-screen  flex-col items-center justify-between  pt-[20px] font-Inter">
+    <div className="relative w-full mx-auto flex h-[900px]  flex-col items-center justify-between  pt-[20px] font-Inter">
       {/* for heading */}
       <div className="absolute w-[360px] top-0 z-50 flex   items-center justify-between p-[20px]">
         <div className="flex flex-col">

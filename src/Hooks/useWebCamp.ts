@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-export const useWebcamCapture = (id: string | undefined, currentPage?: number | undefined) => {
+export const useWebcamCapture = (currentPage?: number | undefined) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);

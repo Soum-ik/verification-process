@@ -26,6 +26,8 @@
 .passport-capture {
     width: 335px;
     height: 475.7px;
+    border-radius: 10px;
+    background: var(--Apps-Background-Color-Dusty-white, #F6F6F6);
 }
 
 .face-recogation {

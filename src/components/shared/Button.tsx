@@ -6,10 +6,11 @@ interface ButtonProps {
     link: string
 }
 
-const Button: React.FC<ButtonProps> = ({ text, style, link }) => {
+const Button: React.FC<ButtonProps> = ({ text, style, link, }) => {
+
     return (
         <Link to={link} className="!w-full">
-            <div className={`h-[38px] mt-[40px] font-semibold bg-brandColor rounded-md cursor-pointer text-white px-[14px] py-[8px] flex !w-full justify-center items-center gap-[2px] self-stretch ${style}`}>
+            <div className={` ${style} h-[38px] mt-[40px] font-semibold bg-brandColor rounded-md cursor-pointer text-white px-[14px] py-[8px] flex !w-full justify-center items-center gap-[2px] self-stretch `}>
                 {text}
             </div>
         </Link>

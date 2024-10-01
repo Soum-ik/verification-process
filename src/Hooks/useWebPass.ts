@@ -8,6 +8,9 @@ export const useWebcamCapture = () => {
     const [isReviewVisible, setIsReviewVisible] = useState(false);
     const [image, setImage] = useState<string>('');
 
+    const bgVideoRef = useRef<HTMLVideoElement>(null);
+
+
     useEffect(() => {
         if (!isWebcamActive) {
             startWebcam();
@@ -30,6 +33,10 @@ export const useWebcamCapture = () => {
                 if (videoRef.current) {
                     videoRef.current.srcObject = stream;
                     videoRef.current.play();
+                }
+                if (bgVideoRef.current) {
+                    bgVideoRef.current.srcObject = stream
+                    bgVideoRef.current.play()
                 }
                 setMediaStream(stream);
                 setIsWebcamActive(true);
@@ -71,9 +78,9 @@ export const useWebcamCapture = () => {
                 context.drawImage(video, 0, 0, videoWidth, videoHeight);
                 const imageDataUrl = canvas.toDataURL("image/png");
                 console.log(imageDataUrl);
-                
+
                 setImage(imageDataUrl);
-                
+
             }
         }
     };
@@ -84,6 +91,7 @@ export const useWebcamCapture = () => {
     };
 
     return {
+        bgVideoRef,
         videoRef,
         canvasRef,
         captureCenterArea,

@@ -5,7 +5,7 @@ import Button from './shared/Button';
 
 
 function LandingPage() {
-  return <div className=" min-h-[95vh] pt-[120px] flex items-center justify-between flex-col mx-auto">
+  return <div className="h-screen  pt-[120px] flex items-center justify-between flex-col mx-auto">
     <div className=" mx-auto  flex items-center justify-center flex-col">
       <img src={Icon} alt="profile icon" className=' pb-[20px]' />
       <h1 className=" font-Inter text-headingColor  pb-[10px] font-bold text-[24px] text-center leading-[30px]">Complete <br />
@@ -13,7 +13,7 @@ function LandingPage() {
       <p className=" text-center font-Inter text-[#6F6464] text-[14px] font-normal">It only takes <span className=' font-semibold'>5 minutes</span> ⏱ to complete!</p>
       <Button link='/capture-license' style='' text='Start process' />
     </div>
-    <div className=' flex items-center justify-center gap-[5px]'>
+    <div className=' mb-[20px] flex items-center justify-center gap-[5px]'>
       <h1>Powered by</h1> <img src={Logo} alt="" />
     </div>
   </div>;

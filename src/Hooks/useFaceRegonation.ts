@@ -4,6 +4,7 @@ import '@tensorflow/tfjs-backend-webgl';
 
 export const useFaceRecognition = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
+    const bgVideoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
     const [isWebcamActive, setIsWebcamActive] = useState(false);
@@ -44,10 +45,12 @@ export const useFaceRecognition = () => {
                     clearInterval(detectionInterval); // Stop when step advances
                 }
             }, 20); // Adjust interval as needed
+            // Cleanup interval on unmount
+            return () => clearInterval(detectionInterval);
         }
     }
 
-    
+
 
 
     const startWebcam = useCallback(async () => {
@@ -59,12 +62,18 @@ export const useFaceRecognition = () => {
                     },
                 });
 
-                if (videoRef.current) {
+                if (videoRef.current && bgVideoRef.current) {
                     videoRef.current.srcObject = stream;
+                    bgVideoRef.current.srcObject = stream;
                     videoRef.current.onloadedmetadata = () => {
                         videoRef.current?.play();
                         runFaceDetection();
                     };
+
+                    bgVideoRef.current.onloadedmetadata = () => {
+                        bgVideoRef.current?.play();
+                    };
+
                     setIsWebcamActive(true);
                     setMediaStream(stream);
                 }
@@ -89,7 +98,6 @@ export const useFaceRecognition = () => {
             startWebcam();
         }
     }, [isWebcamActive, startWebcam]);
-
 
 
     const detect = async (model: blazeface.BlazeFaceModel) => {
@@ -159,13 +167,13 @@ export const useFaceRecognition = () => {
 
 
     const handleCaptureProcess = useCallback(() => {
-        setIsLoading(true);
         capturePicture();
+        setIsLoading(true);
         setTimeout(() => {
             setIsLoading(false);
             stopWebcam()
-        }, 5000); // 3-second delay
-    }, [capturePicture]);
+        }, 8000); // 3-second delay
+    }, [capturePicture, stopWebcam]);
 
 
 
@@ -226,7 +234,7 @@ export const useFaceRecognition = () => {
             console.log("Teeth are showing");
             setTimeout(() => {
                 setCurrentStep(4); // Move to the next step
-            }, 3000);
+            }, 5000);
         } else if (currentStep === 3) {
             console.log("Teeth are not showing");
         }
@@ -257,12 +265,6 @@ export const useFaceRecognition = () => {
             }, 2000);
         }
     }, [currentStep, handleCaptureProcess, stopWebcam]);
-
-
-    
-
-
-
     return {
         videoRef,
         canvasRef,
@@ -274,6 +276,7 @@ export const useFaceRecognition = () => {
         hasMovedLeft,
         captureImage,
         isLoading,
-        modelLoaded
+        modelLoaded,
+        bgVideoRef
     };
 };

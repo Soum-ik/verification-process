@@ -2,20 +2,20 @@ import { IoCloseSharp } from 'react-icons/io5';
 import image1 from '../../public/1.svg';
 import image2 from '../../public/2.svg';
 import useGoBack from '../Hooks/useGoBack';
-import Button from './shared/Button';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function SelectOrientation() {
     const goBack = useGoBack();
-    const [selectedOrientation, setSelectedOrientation] = useState<string>();
+    const [selectedOrientation, setSelectedOrientation] = useState<string | undefined>();
 
     const handleSelection = (orientation: string) => {
         setSelectedOrientation(orientation);
     };
 
     return (
-        <div className="min-h-[65vh] flex items-center justify-center flex-col mx-auto p-[20px]">
-            <div className="w-full flex items-end justify-end">
+        <div className="min-h-[65vh] flex flex-col mx-auto p-[20px]">
+            <div className="w-full flex items-end justify-end py-[20px]">
                 <div onClick={goBack}>
                     <IoCloseSharp className="size-[24px] opacity-70 cursor-pointer" />
                 </div>
@@ -62,13 +62,20 @@ function SelectOrientation() {
                             onChange={() => handleSelection('portrait')}
                             required
                         />
-                        <span className="ml-2 text-paraColor text-[16px] font-semibold">Portrait</span>
+                        <span className="ml-2 text-paraColor  text-[16px] font-semibold">Portrait</span>
                     </div>
-                    <img className="size-[79px]" src={image2} alt="Portrait" />
+                    <img className="size-[79px] cursor-not-allowed" src={image2} alt="Portrait" />
                 </label>
 
             </div>
-            <Button text='Continue' style='mt-0' link={`/open-camera/${selectedOrientation}`} />
+
+            {/* */}
+
+            <Link to={!selectedOrientation ? '#' : `/open-camera/${selectedOrientation}`} className="!w-full">
+                <div className={` ${!selectedOrientation ? 'opacity-50' : ''} h-[38px] mt-[40px] font-semibold bg-brandColor rounded-md cursor-pointer text-white px-[14px] py-[8px] flex !w-full justify-center items-center gap-[2px] self-stretch `}>
+                    Continue
+                </div>
+            </Link>
         </div>
     );
 }

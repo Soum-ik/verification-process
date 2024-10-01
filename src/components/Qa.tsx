@@ -68,7 +68,7 @@ const Qa = () => {
                 Just answer the questions and we are done
             </p>
             <div className="space-y-[40px] mt-[32px]">
-                {questions.map((question, idx: number) => (
+                {questions.map((question) => (
                     <QuestionComponent
                         handleAnswerChange={handleAnswerChange}
                         questionData={question}
