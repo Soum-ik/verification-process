@@ -5,7 +5,7 @@ import Button from './shared/Button';
 
 
 function LandingPage() {
-  return <div className="h-screen  pt-[120px] flex items-center justify-between flex-col mx-auto">
+  return <div className="h-[90vh]  pt-[120px] flex items-center justify-between flex-col mx-auto">
     <div className=" mx-auto  flex items-center justify-center flex-col">
       <img src={Icon} alt="profile icon" className=' pb-[20px]' />
       <h1 className=" font-Inter text-headingColor  pb-[10px] font-bold text-[24px] text-center leading-[30px]">Complete <br />
