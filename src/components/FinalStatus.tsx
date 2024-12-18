@@ -4,14 +4,14 @@ import fail from '../../public/status-fail.svg'
 import passAction from '../../public/pass.svg'
 import failAction from '../../public/fail.svg'
 
-
+import Button from './shared/Button'
 
 
 import H1 from './shared/H1';
 import { ReactNode } from 'react';
-// import { Key } from 'react';
+
 const FinalStatus = () => {
-    const status = true
+    const status = false
     const statusData = [
         {
             title: 'Face',
@@ -30,11 +30,11 @@ const FinalStatus = () => {
         {
             title: 'Compatibility',
             details: [{ "Required to pass": "50%" }, { "Earned score": "40%" }],
-            status: true,
+            status: false,
         },
     ];
 
-    return <div className="min-h-[65vh] pt-[60px] flex items-center justify-between flex-col mx-auto ">
+    return <div className="min-h-[65vh] pt-[60px] p-[20px] w-[360px] flex items-center justify-between flex-col mx-auto ">
         <div className=''>
             {status ? <div className=' space-y-[10px] flex items-center justify-center flex-col'>
                 <img src={pass} alt="status pass" />
@@ -47,7 +47,7 @@ const FinalStatus = () => {
             </div>}
         </div>
 
-        <div className=' mt-[32px] w-[360px]'>
+        <div className=' mt-[32px] w-[360px] px-[20px] xxs:px-0'>
             {statusData.map((item, index) => (
                 <StatusCard
                     key={index}
@@ -56,6 +56,7 @@ const FinalStatus = () => {
                     status={item.status}
                 />
             ))}
+            <Button link='/Download-driver-app' text="What's Next?" />
         </div>
     </div>;
 };
@@ -73,9 +74,9 @@ const StatusCard = ({ title, details, status }: any) => {
             <div>
                 <h3 className="font-Inter text-headingColor    font-bold text-[14px]  leading-normal">{title}</h3>
                 {details && (
-                    <div className="mt-1 text-sm text-gray-500">
-                        {details.map((detail: any, index: number) => (
-                            <div key={index} className="flex">
+                    <div className=" -space-y-[6px] mt-[2px] text-sm text-gray-500">
+                        {details.map((detail: never, index: number) => (
+                            <div key={index} className="flex   ">
                                 {Object.entries(detail).map(([key, value]) => (
                                     <div key={key} className=''>
                                         <span className=' text-[10px] text-[#999999] font-medium'>{key}: </span><span className='text-[10px] text-headingColor  font-semibold'>{value as ReactNode}</span>
@@ -96,3 +97,4 @@ const StatusCard = ({ title, details, status }: any) => {
         </div>
     );
 };
+

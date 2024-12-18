@@ -87,3 +87,17 @@
     font-weight: 600;
     line-height: normal;
 }
+
+
+.clear-area {
+    box-shadow: 0 0 0 9999px rgba(246, 246, 246, 0.6);
+}
+
+.download_driver_app {
+
+    height: 394px;
+}
+
+.clear-area {
+    box-shadow: 0 0 0 9999px rgba(246, 246, 246, 0.8);
+}

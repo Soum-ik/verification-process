@@ -62,16 +62,11 @@ export const useFaceRecognition = () => {
                     },
                 });
 
-                if (videoRef.current && bgVideoRef.current) {
+                if (videoRef.current) {
                     videoRef.current.srcObject = stream;
-                    bgVideoRef.current.srcObject = stream;
                     videoRef.current.onloadedmetadata = () => {
                         videoRef.current?.play();
                         runFaceDetection();
-                    };
-
-                    bgVideoRef.current.onloadedmetadata = () => {
-                        bgVideoRef.current?.play();
                     };
 
                     setIsWebcamActive(true);

@@ -1,1 +1,35 @@
-{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/hooks/usefaceregonation.ts","./src/hooks/usegoback.ts","./src/hooks/usewebcamp.ts","./src/hooks/usewebpass.ts","./src/components/capturepassport.tsx","./src/components/downloaddriver.tsx","./src/components/finalstatus.tsx","./src/components/landingpage.tsx","./src/components/openpassport.tsx","./src/components/qa.tsx","./src/components/scanresult.tsx","./src/components/selectorientation.tsx","./src/components/webcamp.tsx","./src/components/facescanning/facescaning.tsx","./src/components/facescanning/open-cameara-facing.tsx","./src/components/license/capturelicense.tsx","./src/components/license/open-camera.tsx","./src/components/shared/button.tsx","./src/components/shared/capturebutton.tsx","./src/components/shared/captureguidence.tsx","./src/components/shared/h1.tsx","./src/components/shared/loadingdiv.tsx","./src/components/shared/positionbutton.tsx","./src/components/shared/loadingfacingstatus.tsx","./src/interface/qa.interface.ts","./src/layout/mainlayout.tsx","./src/routes/route.tsx"],"version":"5.6.2"}
+{
+    "root": [
+        "./src/app.tsx",
+        "./src/main.tsx",
+        "./src/vite-env.d.ts",
+        "./src/hooks/usefaceregonation.ts",
+        "./src/hooks/usegoback.ts",
+        "./src/hooks/usewebcamp.ts",
+        "./src/hooks/usewebpass.ts",
+        "./src/components/capturepassport.tsx",
+        "./src/components/downloaddriver.tsx",
+        "./src/components/finalstatus.tsx",
+        "./src/components/landingpage.tsx",
+        "./src/components/openpassport.tsx",
+        "./src/components/qa.tsx",
+        "./src/components/scanresult.tsx",
+        "./src/components/selectorientation.tsx",
+        "./src/components/webcamp.tsx",
+        "./src/components/facescanning/facescaning.tsx",
+        "./src/components/facescanning/open-cameara-facing.tsx",
+        "./src/components/license/capturelicense.tsx",
+        "./src/components/license/open-camera.tsx",
+        "./src/components/shared/button.tsx",
+        "./src/components/shared/capturebutton.tsx",
+        "./src/components/shared/captureguidence.tsx",
+        "./src/components/shared/h1.tsx",
+        "./src/components/shared/loadingdiv.tsx",
+        "./src/components/shared/positionbutton.tsx",
+        "./src/components/shared/loadingfacingstatus.tsx",
+        "./src/interface/qa.interface.ts",
+        "./src/layout/mainlayout.tsx",
+        "./src/routes/route.tsx"
+    ],
+    "version": "5.6.2"
+}

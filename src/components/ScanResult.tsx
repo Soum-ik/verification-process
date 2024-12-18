@@ -59,7 +59,7 @@ function ScanResult() {
                 </div>
             </div>
         </div>
-        <div className=" w-[355px] pt-[32px]">
+        <div className=" hidden w-[355px] pt-[32px]">
             <h4 className=" text-[#6F6464]  text-[14px] font-bold font-Inter leading-normal">Passport</h4>
             <div className="  pt-[10px]">
                 <div className="grid grid-cols-[140px_auto] flex-grow-0 ">

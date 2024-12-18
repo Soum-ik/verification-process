@@ -1,8 +1,16 @@
 import { useState } from "react";
-import {  QuestionData } from "../interface/QA.interface";
+import { QuestionData } from "../interface/QA.interface";
 import Button from "./shared/Button";
+import LoadingDiv from "./shared/LoadingDiv";
 
 const Qa = () => {
+
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
+
+
+
+
     const [questions] = useState<QuestionData[]>([
         {
             id: 'q1',
@@ -60,14 +68,17 @@ const Qa = () => {
     };
 
     return (
-        <div className="min-h-[80vh] mt-[30px] flex items-center justify-center flex-col mx-auto  p-[20px]">
+        <div className="min-h-[80vh] w-[360px] p-[20px] mt-[30px] flex items-center justify-center flex-col mx-auto  ">
+            {isLoading && <div className='fixed inset-0 z-[100] flex items-center justify-center bg-black/60 mx-auto min-h-screen'>
+                <LoadingDiv text='Finishing up' />
+            </div>}
             <h1 className="font-Inter text-headingColor pb-[10px] font-bold text-[24px] text-center leading-[30px]">
                 Quick Q&A
             </h1>
             <p className="text-center text-[#6F6464] font-Inter text-[14px] font-normal leading-[18px]">
                 Just answer the questions and we are done
             </p>
-            <div className="space-y-[40px] mt-[32px]">
+            <div className=" space-y-[40px] mt-[32px]">
                 {questions.map((question) => (
                     <QuestionComponent
                         handleAnswerChange={handleAnswerChange}
@@ -94,13 +105,13 @@ const Qa = () => {
 const QuestionComponent = ({ questionData, handleAnswerChange, selectedAnswer }: any) => {
     return (
         <div>
-            <h1 className="text-headingColor self-stretch font-Inter text-[14px] font-normal leading-[18px]">
+            <h1 className="text-headingColor self-stretch font-Inter w-full text-[14px] font-normal leading-[18px]">
                 {questionData.question}
             </h1>
             {questionData.options?.map((option: any, index: number) => (
                 <label
                     key={index}
-                    className={`mt-[5px] flex items-center px-[16px] py-[12px] border-2 rounded-md ${selectedAnswer === option.value ? 'border-blue-600' : 'border-borderColor'
+                    className={`mt-[5px] flex  px-[16px] py-[12px] border-2 rounded-md ${selectedAnswer === option.value ? 'border-blue-600' : 'border-borderColor'
                         }`}
                 >
                     <input

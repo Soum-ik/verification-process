@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 
 export const useWebcamCapture = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
+    const maskRef = useRef<HTMLDivElement>(null);
+
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
     const [isWebcamActive, setIsWebcamActive] = useState(false);
@@ -71,6 +73,10 @@ export const useWebcamCapture = () => {
             const videoWidth = video.videoWidth;
             const videoHeight = video.videoHeight;
 
+
+            // const maskWidth = mask.offsetWidth
+            // const maskHeight = mask.offsetHeight
+
             canvas.width = videoWidth;
             canvas.height = videoHeight;
 
@@ -78,12 +84,10 @@ export const useWebcamCapture = () => {
                 context.drawImage(video, 0, 0, videoWidth, videoHeight);
                 const imageDataUrl = canvas.toDataURL("image/png");
                 console.log(imageDataUrl);
-
                 setImage(imageDataUrl);
-
             }
         }
-    };
+    }
 
     const resetImages = () => {
         setIsReviewVisible(false);
@@ -98,6 +102,7 @@ export const useWebcamCapture = () => {
         resetImages,
         image,
         startWebcam,
-        isReviewVisible
+        isReviewVisible,
+        maskRef
     };
 };
