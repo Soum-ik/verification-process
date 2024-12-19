@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import * as blazeface from '@tensorflow-models/blazeface';
 import '@tensorflow/tfjs-backend-webgl';
+import toast from 'react-hot-toast';
 
 export const useFaceRecognition = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -12,7 +13,7 @@ export const useFaceRecognition = () => {
 
     // to count the steps
     const [currentStep, setCurrentStep] = useState(1);
-    console.log('get the current step', currentStep);
+    // console.log('get the current step', currentStep);
 
 
     const [videoWidth, setVideoWidth] = useState<number | null>(null);
@@ -73,9 +74,10 @@ export const useFaceRecognition = () => {
                     setMediaStream(stream);
                 }
             } else {
-                console.log('Webcam not supported in this browser.');
+                toast.error(`Webcam not supported in this browser.`)
             }
         } catch (error) {
+            toast.error(`Error accessing webcam`)
             console.error('Error accessing webcam', error);
         }
     }, [runFaceDetection]);
@@ -136,10 +138,10 @@ export const useFaceRecognition = () => {
                     console.error("Failed to get canvas context");
                 }
             } else {
-                console.log("No faces detected");
+                // console.log("No faces detected");
             }
         } else {
-            console.error("Video not ready for detection");
+            console.log("Video not ready for detection");
         }
     }
 
@@ -154,7 +156,7 @@ export const useFaceRecognition = () => {
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
                 const imageDataUrl = canvas.toDataURL('image/png');
                 setCaptureImage(imageDataUrl)
-                console.log("Captured Image Data URL:", imageDataUrl);
+                // console.log("Captured Image Data URL:", imageDataUrl);
                 // Further process the image data as needed
             }
         }
@@ -180,18 +182,18 @@ export const useFaceRecognition = () => {
 
         // Check if the face has moved to the left of the center
         if (!hasMovedLeft && (leftEyeX < centerX && rightEyeX < centerX)) {
-            console.log("Face moved to the left");
+            // console.log("Face moved to the left");
             setHasMovedLeft(true);
         }
 
         // Check if the face has moved to the right of the center
         if (!hasMovedRight && (leftEyeX > centerX && rightEyeX > centerX)) {
-            console.log("Face moved to the right");
+            // console.log("Face moved to the right");
             setHasMovedRight(true);
         }
 
         if (hasMovedLeft && hasMovedRight) {
-            console.log("Step 2: Face movement from left to right verified");
+            // console.log("Step 2: Face movement from left to right verified");
             setCurrentStep(3); // Move to the next step
         }
     }, [eyePositions, videoWidth, hasMovedLeft, hasMovedRight]);
@@ -216,22 +218,22 @@ export const useFaceRecognition = () => {
 
         // Check if nose is centered within a 50-pixel range
         if (Math.abs(noseX - centerX) < 40) {
-            console.log('Step 1: Nose is centered.');
+            // console.log('Step 1: Nose is centered.');
             setCurrentStep(2);
             setHasVerifiedCenter(true)
         } else {
-            console.log('Nose is not centered.');
+            // console.log('Nose is not centered.');
         }
     }, [currentStep, eyePositions.nose, hasVerifiedCenter, videoWidth]);
 
     const verifyTeethShowing = useCallback(() => {
         if (currentStep === 3 && isTeethShowing) {
-            console.log("Teeth are showing");
+            // console.log("Teeth are showing");
             setTimeout(() => {
                 setCurrentStep(4); // Move to the next step
             }, 5000);
         } else if (currentStep === 3) {
-            console.log("Teeth are not showing");
+            // console.log("Teeth are not showing");
         }
     }, [currentStep, isTeethShowing]);
 

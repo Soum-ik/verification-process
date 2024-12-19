@@ -12,14 +12,60 @@ import eyeBlink from '../../../public/gifs/Blink GIF.gif';
 import moveHead from '../../../public/gifs/Adjust GIF.gif';
 import LoadingDiv from '../shared/LoadingDiv';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
+import { API, Authorization } from '../../config/config';
+import axios from 'axios';
 
 const FaceVerification: React.FC = () => {
     const {
         videoRef,
         canvasRef,
-        currentStep, isLoading, modelLoaded, hasMovedLeft, hasMovedRight,
+        currentStep, isLoading, modelLoaded, hasMovedLeft, hasMovedRight, captureImage
     } = useFaceRecognition();
+
+    const session_id = localStorage.getItem('session_id')
+
+    const apiCall = useCallback(async () => {
+        if (captureImage && currentStep === 4) {
+            const formData = new FormData();
+
+            // Convert base64 to Blob if needed
+            if (typeof captureImage === 'string') {
+                // If frontImage is a base64 string
+                const response = await fetch(captureImage);
+                const blob = await response.blob();
+                formData.append('image', blob, 'image.jpg');
+            } else if (captureImage && session_id) {
+                // If frontImage is already a Blob
+                formData.append('image', captureImage, 'image.jpg');
+            }
+
+            // if (session_id) {
+            // }
+            formData.append('session_id', session_id || '912748791473892749832747');
+
+            try {
+                const response = await axios.post(`${API}identity_verification`, formData, {
+                    headers: {
+                        Authorization,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+
+                localStorage.setItem('response', JSON.stringify(response.data))
+
+                console.log('Response:', JSON.stringify(response.data));
+            } catch (error) {
+                console.error('Error uploading image:', error);
+            }
+        }
+    }, [captureImage, currentStep]);
+
+
+
+    useEffect(() => {
+        apiCall(); // Call whenever dependencies change
+    }, [apiCall]);
 
     const verificationSteps = [
         "Position your face within the circle",
@@ -56,7 +102,6 @@ const FaceVerification: React.FC = () => {
     const progressPercentage = (completedSteps / (totalSteps - 1)) * 100;
 
 
-    console.log(gif[currentStep]);
 
 
     return (
@@ -101,7 +146,7 @@ const FaceVerification: React.FC = () => {
 
                 </div>
             </div>
-           
+
 
             <div className='w-full   h-full flex justify-center items-center mt-[60px]'>
                 {(modelLoaded && currentStep >= 1) && <img src={gif[currentStep]} className='gif-size' alt="" />}

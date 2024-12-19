@@ -1,10 +1,11 @@
- 
-import Router from "./routes/route";
 
+import Router from "./routes/route";
+import { Toaster } from 'react-hot-toast'
 const App: React.FC = () => {
   return (
     <div className="flex">
-      <Router/>
+      <Router />
+      <Toaster position="top-right" />
     </div>
   );
 };
