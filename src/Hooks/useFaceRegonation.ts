@@ -1,8 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import * as blazeface from '@tensorflow-models/blazeface';
-import '@tensorflow/tfjs-backend-webgl';
+import { setWasmPaths } from '@tensorflow/tfjs-backend-wasm';
 import toast from 'react-hot-toast';
+import * as tf from '@tensorflow/tfjs';
 
+
+setWasmPaths({
+    'tfjs-backend-wasm.wasm': '/renamed.wasm',
+    'tfjs-backend-wasm-simd.wasm': '/renamed-simd.wasm',
+    'tfjs-backend-wasm-threaded-simd.wasm': '/renamed-threaded-simd.wasm'
+});
+
+tf.setBackend('wasm').then(() => {
+    // Your code here
+});
 export const useFaceRecognition = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const bgVideoRef = useRef<HTMLVideoElement>(null);
