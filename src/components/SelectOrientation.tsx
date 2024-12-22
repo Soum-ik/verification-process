@@ -34,7 +34,7 @@ function SelectOrientation() {
 
       <div className="flex w-full flex-col items-center justify-center pt-[40px]">
         <label
-          className={`mt-[5px] flex w-full items-center justify-between rounded-md border-[2px] px-[16px] py-[12px] ${selectedOrientation === "landscape" ? "border-brandColor" : ""
+          className={`mt-[5px] flex w-full items-center justify-between rounded-md border-[1px] px-[16px] py-[12px] ${selectedOrientation === "landscape" ? "border-brandColor" : ""
             }`}
           onClick={() => handleSelection("landscape")}
         >
@@ -46,7 +46,8 @@ function SelectOrientation() {
               onChange={() => handleSelection("landscape")}
               required
             />
-            <span className="ml-2 font-semibold text-[16px] text-paraColor">
+            <span className={`ml-2 text-[16px] font-semibold   ${selectedOrientation === "landscape" ? "text-headingColor" : "text-paraColor"
+              } `}>
               Landscape
             </span>
           </div>
@@ -54,19 +55,20 @@ function SelectOrientation() {
         </label>
 
         <label
-          className={`mt-[5px] flex w-full items-center justify-between rounded-md border-[2px] px-[16px] py-[12px] ${selectedOrientation === "portrait" ? "border-blue-500" : ""
+          className={`mt-[5px] flex w-full items-center justify-between rounded-md border-[1px] px-[16px] py-[12px] ${selectedOrientation === "portrait" ? "border-brandColor" : ""
             }`}
           onClick={() => handleSelection("portrait")}
         >
           <div className="flex items-center">
             <input
-              className="form-radio size-[18px] text-blue-600"
+              className="form-radio size-[18px] text-brandColor"
               type="radio"
               checked={selectedOrientation === "portrait"}
               onChange={() => handleSelection("portrait")}
               required
             />
-            <span className="ml-2 text-[16px] font-semibold text-paraColor">
+            <span className={`ml-2 text-[16px] font-semibold   ${selectedOrientation === "portrait" ? "text-headingColor" : "text-paraColor"
+              } `}>
               Portrait
             </span>
           </div>

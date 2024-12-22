@@ -7,9 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "host": "vite --host",
-    "start": "set HTTPS=true&&vite --host"
+    "preview": "vite preview --port 9000",
+    "host": "vite --host --port 9000",
+    "start": "set HTTPS=true&&vite --host --port 9000"
   },
   "dependencies": {
     "@tensorflow-models/blazeface": "^0.1.0",
