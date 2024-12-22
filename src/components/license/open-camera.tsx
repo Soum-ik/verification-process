@@ -8,6 +8,8 @@ import axios from "axios";
 import { API, Authorization } from "../../config/config";
 import { v4 as uuidv4 } from 'uuid'
 import LoadingDiv from "../shared/LoadingDiv";
+import toast from "react-hot-toast";
+
 const OpenCamera = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -96,15 +98,23 @@ const OpenCamera = () => {
 
       try {
         setIsLoading(true)
-        const response = await axios.post(`${API}data_extraction`, formData, {
+        const { data } = await axios.post(`${API}data_extraction`, formData, {
           headers: {
             Authorization,
             'Content-Type': 'multipart/form-data',
           },
         });
 
+    
 
-        console.log('Response:', response.data);
+        if (data.Date_Error) {
+          toast.error(data.Date_Error)
+          setTimeout(() => {
+            restImage()
+          }, 1000);
+        }
+
+        console.log('Response:', data);
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
