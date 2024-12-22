@@ -1,10 +1,9 @@
-
-
 import { IoCloseSharp } from 'react-icons/io5';
 import { useFaceRecognition } from '../../Hooks/useFaceRegonation';
 import 'react-circular-progressbar/dist/styles.css';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import goBack from '../../Hooks/useGoBack';
+// import AWS from 'aws-sdk';
 
 // Import GIFs
 import smile from '../../../public/gifs/Smile GIF.gif';
@@ -16,13 +15,36 @@ import { useCallback, useEffect } from 'react';
 import { API, Authorization } from '../../config/config';
 import axios from 'axios';
 
+// const s3 = new AWS.S3({
+//     accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+//     secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+//     region: process.env.REACT_APP_AWS_REGION,
+// });
+
+// const uploadToS3 = async (data: string) => {
+//     const params = {
+//         Bucket: process.env.REACT_APP_S3_BUCKET_NAME,
+//         Key: `response_${Date.now()}.txt`,
+//         Body: data,
+//         ContentType: 'text/plain',
+//     };
+
+//     try {
+//         await s3.upload(params).promise();
+//         console.log('File uploaded successfully');
+//     } catch (error) {
+//         console.error('Error uploading file:', error);
+//     }
+// };
+
 const FaceVerification: React.FC = () => {
+
     const {
         videoRef,
         canvasRef,
         currentStep, isLoading, modelLoaded, hasMovedLeft, hasMovedRight, captureImage
     } = useFaceRecognition();
-
+    // const [loadingFetching, setLoadingFetching] = useState<boolean>(false);
     const session_id = localStorage.getItem('session_id')
 
     const apiCall = useCallback(async () => {
@@ -40,11 +62,11 @@ const FaceVerification: React.FC = () => {
                 formData.append('image', captureImage, 'image.jpg');
             }
 
-            // if (session_id) {
-            // }
+
             formData.append('session_id', session_id || '912748791473892749832747');
 
             try {
+                // setLoadingFetching(true);
                 const response = await axios.post(`${API}identity_verification`, formData, {
                     headers: {
                         Authorization,
@@ -52,10 +74,14 @@ const FaceVerification: React.FC = () => {
                     },
                 });
 
-                localStorage.setItem('response', JSON.stringify(response.data))
-
-                console.log('Response:', JSON.stringify(response.data));
+                // const responseData = JSON.stringify(response.data);
+                localStorage.setItem('response', response.data);
+                console.log('Response: face', response.data);
+                // setLoadingFetching(false);
+                // Upload response data to S3
+                // await uploadToS3(responseData);
             } catch (error) {
+                // setLoadingFetching(false);
                 console.error('Error uploading image:', error);
             }
         }

@@ -12,31 +12,26 @@ import DownloadDriver from "../components/DownloadDriver";
 // import OpenPassport from "../components/OpenPassport";
 import OpenCamearaFacing from "../components/facescanning/Open-Cameara-Facing";
 
-
 const Router: React.FC = () => {
   return (
     <Routes>
+      {/* Landing Page Route */}
       <Route path="/" element={<LandingPage />} />
 
-      {/* for capture license start */}
+      {/* Capture License Routes */}
       <Route path="/capture-license" element={<Capturelicense />} />
       <Route path="/Orientation" element={<SelectOrientation />} />
       <Route path="/open-camera/:id" element={<OpenCamera />} />
-      {/* for capture license end */}
 
-
-      {/* for face scaning  start */}
+      {/* Face Scanning Routes */}
       <Route path="/face-scaning" element={<FaceScaning />} />
       <Route path="/open-face-recogation-camera" element={<OpenCamearaFacing />} />
-      {/* for face scaning  end */}
 
-
-      {/* for capture passport start */}
+      {/* Capture Passport Routes (commented out) */}
       {/* <Route path="/capture-passport" element={<Capturepassport/>} />
       <Route path="/open-camera-passport" element={<OpenPassport />} /> */}
-      {/* for capture passport end  */}
 
-
+      {/* Other Routes */}
       <Route path="/scan-result" element={<ScanResult />} />
       <Route path="/quick-q&a" element={<Qa />} />
       <Route path="/final-status" element={<FinalStatus />} />

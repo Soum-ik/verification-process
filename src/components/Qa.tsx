@@ -5,7 +5,7 @@ import LoadingDiv from "./shared/LoadingDiv";
 
 const Qa = () => {
 
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, ] = useState<boolean>(false);
 
 
 
@@ -102,13 +102,19 @@ const Qa = () => {
     );
 };
 
-const QuestionComponent = ({ questionData, handleAnswerChange, selectedAnswer }: any) => {
+interface QuestionComponentProps {
+    questionData: QuestionData;
+    handleAnswerChange: (questionId: string, answer: string) => void;
+    selectedAnswer: string;
+}
+
+const QuestionComponent = ({ questionData, handleAnswerChange, selectedAnswer }: QuestionComponentProps) => {
     return (
         <div>
             <h1 className="text-headingColor self-stretch font-Inter w-full text-[14px] font-normal leading-[18px]">
                 {questionData.question}
             </h1>
-            {questionData.options?.map((option: any, index: number) => (
+            {questionData.options?.map((option: { label: string; value: string }, index: number) => (
                 <label
                     key={index}
                     className={`mt-[5px] flex  px-[16px] py-[12px] border-2 rounded-md ${selectedAnswer === option.value ? 'border-blue-600' : 'border-borderColor'

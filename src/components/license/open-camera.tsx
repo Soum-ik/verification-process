@@ -7,6 +7,7 @@ import { useWebcamCapture } from "../../Hooks/useWebCamp";
 import axios from "axios";
 import { API, Authorization } from "../../config/config";
 import { v4 as uuidv4 } from 'uuid'
+import LoadingDiv from "../shared/LoadingDiv";
 const OpenCamera = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -14,7 +15,7 @@ const OpenCamera = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const currentSide = currentPage === 1 ? "Front side" : "Back side";
   const [inReviewMode, setinReviewMode] = useState<boolean>(false);
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
 
   function goBack() {
@@ -31,10 +32,12 @@ const OpenCamera = () => {
 
 
   function nextForBackSideImageCapture() {
-    setCurrentPage(2)
-    startWebcam()
-    if (currentPage === 2) {
-      navigate('/face-scaning')
+    if (!isLoading) {
+      setCurrentPage(2)
+      startWebcam()
+      if (currentPage === 2) {
+        navigate('/face-scaning')
+      }
     }
   }
 
@@ -92,6 +95,7 @@ const OpenCamera = () => {
 
 
       try {
+        setIsLoading(true)
         const response = await axios.post(`${API}data_extraction`, formData, {
           headers: {
             Authorization,
@@ -101,7 +105,9 @@ const OpenCamera = () => {
 
 
         console.log('Response:', response.data);
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         console.error('Error uploading image:', error);
       }
     }
@@ -116,6 +122,9 @@ const OpenCamera = () => {
 
   return (
     <div className="relative w-full mx-auto flex  h-[90vh]  flex-col items-center justify-between  pt-[20px] font-Inter">
+      {isLoading && <div className='fixed inset-0 z-[100] flex items-center justify-center bg-black/60 mx-auto min-h-screen'>
+        <LoadingDiv text='Extracting data' />
+      </div>}
       {/* for heading */}
       <div className="absolute w-[360px] top-0 z-50 flex   items-center justify-between p-[20px]">
         <div className="flex flex-col">

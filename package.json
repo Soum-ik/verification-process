@@ -16,6 +16,7 @@
     "@tensorflow/tfjs": "^4.21.0",
     "@tensorflow/tfjs-converter": "3.20.0",
     "@tensorflow/tfjs-core": "3.20.0",
+    "aws-sdk": "^2.1692.0",
     "axios": "^1.7.9",
     "face-api.js": "^0.22.2",
     "i": "^0.3.7",
