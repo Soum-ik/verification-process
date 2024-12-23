@@ -15,27 +15,6 @@ import { useCallback, useEffect } from 'react';
 import { API, Authorization } from '../../config/config';
 import axios from 'axios';
 
-// const s3 = new AWS.S3({
-//     accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-//     secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-//     region: process.env.REACT_APP_AWS_REGION,
-// });
-
-// const uploadToS3 = async (data: string) => {
-//     const params = {
-//         Bucket: process.env.REACT_APP_S3_BUCKET_NAME,
-//         Key: `response_${Date.now()}.txt`,
-//         Body: data,
-//         ContentType: 'text/plain',
-//     };
-
-//     try {
-//         await s3.upload(params).promise();
-//         console.log('File uploaded successfully');
-//     } catch (error) {
-//         console.error('Error uploading file:', error);
-//     }
-// };
 
 const FaceVerification: React.FC = () => {
 
@@ -47,51 +26,6 @@ const FaceVerification: React.FC = () => {
     // const [loadingFetching, setLoadingFetching] = useState<boolean>(false);
     const session_id = localStorage.getItem('session_id')
 
-    const apiCall = useCallback(async () => {
-        if (captureImage && currentStep === 4) {
-            const formData = new FormData();
-
-            // Convert base64 to Blob if needed
-            if (typeof captureImage === 'string') {
-                // If frontImage is a base64 string
-                const response = await fetch(captureImage);
-                const blob = await response.blob();
-                formData.append('image', blob, 'image.jpg');
-            } else if (captureImage && session_id) {
-                // If frontImage is already a Blob
-                formData.append('image', captureImage, 'image.jpg');
-            }
-
-
-            formData.append('session_id', session_id || '912748791473892749832747');
-
-            try {
-                // setLoadingFetching(true);
-                const response = await axios.post(`${API}identity_verification`, formData, {
-                    headers: {
-                        Authorization,
-                        'Content-Type': 'multipart/form-data',
-                    },
-                });
-
-                // const responseData = JSON.stringify(response.data);
-                localStorage.setItem('response', response.data);
-                console.log('Response: face', response.data);
-                // setLoadingFetching(false);
-                // Upload response data to S3
-                // await uploadToS3(responseData);
-            } catch (error) {
-                // setLoadingFetching(false);
-                console.error('Error uploading image:', error);
-            }
-        }
-    }, [captureImage, currentStep]);
-
-
-
-    useEffect(() => {
-        apiCall(); // Call whenever dependencies change
-    }, [apiCall]);
 
     const verificationSteps = [
         "Position your face within the circle",
@@ -106,8 +40,8 @@ const FaceVerification: React.FC = () => {
     useEffect(() => {
         if (currentStep === 4) {
             const timer = setTimeout(() => {
-                navigate('/scan-result'); // Replace with your target route
-                window.location.reload()
+                // navigate('/scan-result'); // Replace with your target route
+                // window.location.reload()
             }, 3000); // 1 second delay
 
             // Cleanup function to clear the timer
@@ -127,7 +61,66 @@ const FaceVerification: React.FC = () => {
     // Calculate the progress percentage
     const progressPercentage = (completedSteps / (totalSteps - 1)) * 100;
 
+    const apiCall = useCallback(async () => {
+        if (captureImage && currentStep === 4) {
+            const formData = new FormData();
 
+            // Log session_id
+            console.log('Session ID:', session_id || '912748791473892749832747');
+            formData.append('session_id', session_id || '912748791473892749832747');
+
+            // Log captureImage type and content
+            console.log('CaptureImage type:', typeof captureImage);
+            console.log('CaptureImage content:', captureImage);
+
+            if (typeof captureImage === 'string') {
+                try {
+                    const response = await fetch(captureImage);
+                    const blob = await response.blob();
+                    console.log('Blob created:', blob);
+                    formData.append('image', blob, 'image.jpg');
+                } catch (error) {
+                    console.error('Error converting to blob:', error);
+                }
+            } else if (captureImage) {
+                console.log('Direct blob append');
+                formData.append('image', captureImage, 'image.jpg');
+            }
+
+
+            console.log(formData, 'formdata checking done');
+
+
+            const responseData = localStorage.getItem('response');
+            try {
+                // setLoadingFetching(true);
+                const { data } = await axios.post(`${API}identity_verification`, formData, {
+                    headers: {
+                        Authorization,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+
+                console.log('Response:', data);
+
+
+                if (responseData) {
+                    const parsedResponseData = JSON.parse(responseData);
+                    const updateData = JSON.stringify({ ...parsedResponseData, ...data });
+                    localStorage.setItem('response', updateData);
+                }
+            } catch (error) {
+                // setLoadingFetching(false);
+                console.error('Error uploading image:', error);
+            }
+        }
+    }, [captureImage, currentStep, Authorization]);
+
+
+
+    useEffect(() => {
+        apiCall(); // Call whenever dependencies change
+    }, [apiCall]);
 
 
     return (

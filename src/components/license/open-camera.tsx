@@ -8,7 +8,7 @@ import axios from "axios";
 import { API, Authorization } from "../../config/config";
 import { v4 as uuidv4 } from 'uuid'
 import LoadingDiv from "../shared/LoadingDiv";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 
 const OpenCamera = () => {
   const navigate = useNavigate();
@@ -19,6 +19,12 @@ const OpenCamera = () => {
   const [inReviewMode, setinReviewMode] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  if (frontImage) {
+    localStorage.setItem("frontImage", frontImage);
+  }
+  if (backImage) {
+    localStorage.setItem("backImage", backImage);
+  }
 
   function goBack() {
     if (currentPage === 1) {
@@ -105,14 +111,16 @@ const OpenCamera = () => {
           },
         });
 
-    
+        localStorage.setItem('response', JSON.stringify(data));
 
-        if (data.Date_Error) {
-          toast.error(data.Date_Error)
-          setTimeout(() => {
-            restImage()
-          }, 1000);
-        }
+
+
+        // if (data.Date_Error) {
+        //   toast.error(data.Date_Error)
+        //   setTimeout(() => {
+        //     restImage()
+        //   }, 1000);
+        // }
 
         console.log('Response:', data);
         setIsLoading(false);

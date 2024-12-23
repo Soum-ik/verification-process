@@ -10,6 +10,8 @@ export const useWebcamCapture = (currentPage?: number | undefined) => {
     const [isWebcamActive, setIsWebcamActive] = useState(false);
     const [isReviewVisible, setIsReviewVisible] = useState(false); // State to control the visibility of the review
 
+    
+
     const bgVideoRef = useRef<HTMLVideoElement>(null);
 
 
@@ -90,6 +92,8 @@ export const useWebcamCapture = (currentPage?: number | undefined) => {
             }
         }
     };
+
+
 
     const resetFrontImage = () => {
         setFrontImage(null);

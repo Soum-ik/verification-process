@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import * as blazeface from '@tensorflow-models/blazeface';
-import'@tensorflow/tfjs-backend-webgl';
+import '@tensorflow/tfjs-backend-webgl';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import * as tfOps from '@tensorflow/tfjs-core/dist/ops/ops_for_converter';
 import toast from 'react-hot-toast';
@@ -32,7 +32,7 @@ export const useFaceRecognition = () => {
     const [hasMovedRight, setHasMovedRight] = useState(false);
     const [hasVerifiedCenter, setHasVerifiedCenter] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [captureImage, setCaptureImage] = useState('');
+    const [captureImage, setCaptureImage] = useState<string | null>(null);
 
 
 
