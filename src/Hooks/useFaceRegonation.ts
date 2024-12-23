@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import * as blazeface from '@tensorflow-models/blazeface';
-import'@tensorflow/tfjs-backend-webgl';
+// import'@tensorflow/tfjs-backend-webgl';
 import toast from 'react-hot-toast';
 
 export const useFaceRecognition = () => {
