@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Button from "./shared/Button";
 import LoadingDiv from "./shared/LoadingDiv";
+import toast from "react-hot-toast";
 
 interface QuestionData {
     id: string;
@@ -18,7 +19,7 @@ const Qa = () => {
         wrong: 0,
     });
     const [score, setScore] = useState<number | null>(null); // Store score
-
+    
     localStorage.setItem('score', JSON.stringify(score));
     localStorage.setItem('results', JSON.stringify(results));
 
@@ -28,7 +29,7 @@ const Qa = () => {
         const fetchQuestions = async () => {
             try {
                 const response = await fetch(
-                    "http://localhost:8000/api/brands/compatibility-questions/1"
+                    "https://backend.illama360.com/api/brands/compatibility-questions/1"
                 );
                 const data = await response.json();
                 console.log(data, "questions data checking");
@@ -46,7 +47,7 @@ const Qa = () => {
 
                 setQuestions(formattedQuestions);
             } catch (error) {
-                console.error("Error fetching questions:", error);
+                console.log("Error fetching questions:", error);
             } finally {
                 setIsLoading(false);
             }
@@ -67,6 +68,7 @@ const Qa = () => {
     const calculateResults = () => {
         let right = 0;
         let wrong = 0;
+        let unanswered = 0;
 
         questions.forEach((question) => {
             const userAnswer = answers[question.id];
@@ -76,20 +78,19 @@ const Qa = () => {
                 } else {
                     wrong++;
                 }
-            }
-        });
-        let correctAnswers = 0;
-
-        questions.forEach((question) => {
-            if (answers[question.id] === question.compatibleAnswer) {
-                correctAnswers++;
+            } else {
+                unanswered++;
             }
         });
 
-        const percentage = (correctAnswers / questions.length) * 100;
+        if (unanswered > 0) {
+            toast.error(`You have ${unanswered} unanswered question(s). Please complete all questions.`);
+            return;
+        }
+
+        const percentage = (right / questions.length) * 100;
         setScore(percentage);
         setResults({ right, wrong });
-
     };
 
     if (isLoading) {

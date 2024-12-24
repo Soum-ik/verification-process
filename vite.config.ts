@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     rollupOptions: {
-      external: ['@tensorflow/tfjs-core/dist/ops/ops_for_converter'],
+      // external: ['@tensorflow/tfjs-core/dist/ops/ops_for_converter'],
     },
   },
 })

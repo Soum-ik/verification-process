@@ -11,9 +11,10 @@ import eyeBlink from '../../../public/gifs/Blink GIF.gif';
 import moveHead from '../../../public/gifs/Adjust GIF.gif';
 import LoadingDiv from '../shared/LoadingDiv';
 import { useNavigate } from 'react-router-dom';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { API, Authorization } from '../../config/config';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 
 const FaceVerification: React.FC = () => {
@@ -26,6 +27,22 @@ const FaceVerification: React.FC = () => {
     // const [loadingFetching, setLoadingFetching] = useState<boolean>(false);
     const session_id = localStorage.getItem('session_id')
 
+    if (captureImage) {
+        toast.success('Image captured successfully');
+        localStorage.setItem('captureImage', captureImage);
+    }
+
+    const [capture, setCapture] = useState<Blob | null>(null);
+    const formData = new FormData();
+    if (capture) {
+        formData.append('capture', capture, 'image.jpg');
+    }
+
+    useEffect(() => {
+        if (typeof captureImage !== 'string') {
+            setCapture(captureImage);
+        }
+    }, [captureImage])
 
     const verificationSteps = [
         "Position your face within the circle",
@@ -37,18 +54,16 @@ const FaceVerification: React.FC = () => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (currentStep === 4) {
-            const timer = setTimeout(() => {
-                // navigate('/scan-result'); // Replace with your target route
-                // window.location.reload()
-            }, 3000); // 1 second delay
 
-            // Cleanup function to clear the timer
-            return () => clearTimeout(timer);
-        }
-    }, [currentStep, navigate]);
+    interface VerificationResponse {
+        Verified: boolean;
+        driving_license_url: string;
+        user_image_url: string;
+    }
 
+    const [response, setResponse] = useState<VerificationResponse | null>(null);
+
+    console.log(response, 'checking the response that i recive from the server')
 
     const totalSteps = verificationSteps.length + 1; // +2 for hasMovedRight and hasMovedLeft
 
@@ -77,18 +92,15 @@ const FaceVerification: React.FC = () => {
                 try {
                     const response = await fetch(captureImage);
                     const blob = await response.blob();
-                    console.log('Blob created:', blob);
                     formData.append('image', blob, 'image.jpg');
                 } catch (error) {
                     console.error('Error converting to blob:', error);
                 }
             } else if (captureImage) {
-                console.log('Direct blob append');
                 formData.append('image', captureImage, 'image.jpg');
             }
 
 
-            console.log(formData, 'formdata checking done');
 
 
             const responseData = localStorage.getItem('response');
@@ -100,14 +112,20 @@ const FaceVerification: React.FC = () => {
                         'Content-Type': 'multipart/form-data',
                     },
                 });
+                localStorage.setItem('identity_verification', JSON.stringify(data));
 
-                console.log('Response:', data);
+                setResponse(data)
+                if (!data.Verified) {
+                    toast.error('Face verification failed');
+                }
+
+                localStorage.setItem('res', JSON.stringify(response))
 
 
                 if (responseData) {
                     const parsedResponseData = JSON.parse(responseData);
                     const updateData = JSON.stringify({ ...parsedResponseData, ...data });
-                    localStorage.setItem('response', updateData);
+                    localStorage.setItem('response1', updateData);
                 }
             } catch (error) {
                 // setLoadingFetching(false);
@@ -122,6 +140,26 @@ const FaceVerification: React.FC = () => {
         apiCall(); // Call whenever dependencies change
     }, [apiCall]);
 
+
+    useEffect(() => {
+        if (currentStep === 4) {
+            const timer = setTimeout(() => {
+                if (response?.Verified) {
+                    console.log(response.Verified);
+
+                    navigate('/scan-result'); // Replace with your target route
+                    // window.location.reload()
+                } else {
+                    toast.error('Face verification failed');
+                    navigate('/open-face-recogation-camera'); // Replace with your target route
+                    // window.location.reload()
+                }
+            }, 3000); // 1 second delay
+
+            // Cleanup function to clear the timer
+            return () => clearTimeout(timer);
+        }
+    }, [currentStep, navigate]);
 
     return (
         <div className="flex min-h-[65vh] w-full items-center justify-center flex-col mx-auto p-[20px]">

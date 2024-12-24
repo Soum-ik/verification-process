@@ -8,6 +8,7 @@ import axios from "axios";
 import { API, Authorization } from "../../config/config";
 import { v4 as uuidv4 } from 'uuid'
 import LoadingDiv from "../shared/LoadingDiv";
+import toast from "react-hot-toast";
 // import toast from "react-hot-toast";
 
 const OpenCamera = () => {
@@ -86,7 +87,7 @@ const OpenCamera = () => {
     if (inReviewMode && currentPage === 1 && frontImage) {
       const session_id = uuidv4();
       const formData = new FormData();
-
+      console.log(formData, 'checking form data');
       // Convert base64 to Blob if needed
       if (typeof frontImage === 'string') {
         // If frontImage is a base64 string
@@ -102,6 +103,8 @@ const OpenCamera = () => {
       formData.append('session_id', session_id);
 
 
+
+
       try {
         setIsLoading(true)
         const { data } = await axios.post(`${API}data_extraction`, formData, {
@@ -111,16 +114,20 @@ const OpenCamera = () => {
           },
         });
 
-        localStorage.setItem('response', JSON.stringify(data));
+        localStorage.setItem('response1', JSON.stringify(data));
 
 
 
         // if (data.Date_Error) {
         //   toast.error(data.Date_Error)
-        //   setTimeout(() => {
+        //   return setTimeout(() => {
         //     restImage()
+        //     setIsLoading(false);
+
         //   }, 1000);
         // }
+
+        toast.success('License was successfully extracted');
 
         console.log('Response:', data);
         setIsLoading(false);

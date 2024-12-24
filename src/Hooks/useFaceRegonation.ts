@@ -1,11 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import * as blazeface from '@tensorflow-models/blazeface';
-import '@tensorflow/tfjs-backend-webgl';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import * as tfOps from '@tensorflow/tfjs-core/dist/ops/ops_for_converter';
+import '@tensorflow/tfjs-backend-webgl'; 
 import toast from 'react-hot-toast';
 
-console.log(tfOps, ' tfOps testing with custom model');
 
 
 export const useFaceRecognition = () => {
@@ -161,6 +158,7 @@ export const useFaceRecognition = () => {
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
                 const imageDataUrl = canvas.toDataURL('image/png');
                 setCaptureImage(imageDataUrl)
+
                 // console.log("Captured Image Data URL:", imageDataUrl);
                 // Further process the image data as needed
             }
@@ -236,6 +234,7 @@ export const useFaceRecognition = () => {
             // console.log("Teeth are showing");
             setTimeout(() => {
                 setCurrentStep(4); // Move to the next step
+                capturePicture();
             }, 5000);
         } else if (currentStep === 3) {
             // console.log("Teeth are not showing");
